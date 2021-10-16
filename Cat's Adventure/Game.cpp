@@ -42,12 +42,17 @@ void Game::update()
 	this->updatePlayer();
 }
 
+void Game::rederPlayer()
+{
+	this->player->render(this->window);//render players and send to window
+}
+
 void Game::render()
 {
-	this->window.clear(sf::Color::Cyan);
+	this->window.clear(sf::Color::Black);
 
 	//Render game
-
+	this->rederPlayer();
 
 	this->window.display();
 }
