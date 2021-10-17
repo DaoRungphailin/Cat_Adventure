@@ -29,6 +29,19 @@ void Game::updatePlayer()
 	this->player->update();
 }
 
+void Game::updateCollision()
+{
+	//Collision bottom of screen
+	if (this->player->getGlobalBounds().top + this->player->getGlobalBounds().height > this->window.getSize().y)
+	{
+		this->player->resetVelocityY();
+		this->player->setPosition(
+			this->player->getGlobalBounds().left,
+			this->window.getSize().y - this->player->getGlobalBounds().height
+			);
+	}
+}
+
 void Game::update()
 {
 	//Polling window events
@@ -38,8 +51,23 @@ void Game::update()
 			this->window.close();
 		else if(this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
 			this->window.close();
+
+		if (
+			this->ev.type == sf::Event::KeyReleased &&
+			(
+				this->ev.key.code == sf::Keyboard::A ||
+				this->ev.key.code == sf::Keyboard::D ||
+				this->ev.key.code == sf::Keyboard::W ||
+				this->ev.key.code == sf::Keyboard::S
+				)
+			)
+		{
+			this->player->resetAnimationTimer();
+		}
 	}
 	this->updatePlayer();
+
+	this->updateCollision();
 }
 
 void Game::rederPlayer()
