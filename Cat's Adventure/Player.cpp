@@ -30,10 +30,10 @@ void Player::initAnimations()
 
 void Player::initPhysics()
 {
-	this->velocityMax = 10.f;
+	this->velocityMax = 22.f;
 	this->velocityMin = 1.f;
-	this->acceleration = 1.f;
-	this->drag = 0.93f;
+	this->acceleration = 4.f;
+	this->drag = 0.87f;
 	this->gravity = 4.f;
 	this->velocityMaxY = 15.f;
 }
@@ -59,6 +59,11 @@ const bool& Player::getAnimSwitch()
 	if (this->animationSwitch)
 		this->animationSwitch = false;
 	return anim_switch;
+}
+
+const sf::Vector2f Player::getPosition() const
+{
+	return this->sprite.getPosition();
 }
 
 const sf::FloatRect Player::getGlobalBounds() const
