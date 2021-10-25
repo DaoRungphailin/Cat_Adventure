@@ -4,7 +4,7 @@
 
 void Game::initWindow()
 {
-	this->window.create(sf::VideoMode(1000, 800), "Cat's Adventure", sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings());
+	this->window.create(sf::VideoMode(1000.f, 760.f), "Cat's Adventure", sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings());
 	this->window.setFramerateLimit(144);
 }
 
@@ -15,7 +15,7 @@ void Game::initPlayer()
 
 void Game::initWorld()
 {
-	if (!this->worldBackgroundTex.loadFromFile("Textures/background1.png"))
+	if (!this->worldBackgroundTex.loadFromFile("Textures/BG1.png"))
 	{
 		std::cout << "ERORR Can't load background" << "\n";
 	}
@@ -45,17 +45,18 @@ void Game::updateCollision()
 	if (this->player->getPosition().y + this->player->getGlobalBounds().height > this->window.getSize().y)
 	{
 		this->player->resetVelocityY();
-		this->player->setPosition(this->player->getPosition().x, this->window.getSize().y - this->player->getGlobalBounds().height-80);
+		this->player->setPosition(this->player->getPosition().x, this->window.getSize().y - this->player->getGlobalBounds().height-110);
 		this->player->jumping = false;
 		this->player->jumpingUp = false;
 		this->player->gravityBool = false;
 	}
 }
 
+
 void Game::updateWorld()
 {
 	this->worldBackground.setPosition(backgroundX, this->worldBackground.getPosition().y);
-	this->backgroundX -= 0.5f;
+	this->backgroundX -= 0.5;
 }
 
 void Game::update()
@@ -85,7 +86,6 @@ void Game::update()
 	this->updateCollision();
 	this->updateWorld();
 }
-
 void Game::rederPlayer()
 {
 	this->player->render(this->window);//render players and send to window

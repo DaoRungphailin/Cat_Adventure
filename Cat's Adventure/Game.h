@@ -10,15 +10,15 @@ private:
 
 	Player* player;
 
-	//World
-	sf::Texture worldBackgroundTex;
-	sf::Sprite worldBackground;
-	float backgroundX = 0;
-
 	//Private function
 	void initWindow();
 	void initPlayer();
 	void initWorld();
+
+	//World
+	sf::Texture worldBackgroundTex;
+	sf::Sprite worldBackground;
+	float backgroundX = 0;
 
 public:
 
