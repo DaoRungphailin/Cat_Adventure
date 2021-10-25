@@ -19,7 +19,8 @@ void Player::initSprite()
 	this->sprite.setTexture(this->textureSheet);
 	this->currentFrame = sf::IntRect(0, 96, 50, 50);
 	this->sprite.setTextureRect(this->currentFrame);
-	this->sprite.setScale(5.f, 5.f);
+	this->sprite.setScale(4.f, 4.f);
+	this->sprite.setPosition(100.f, 900.f);
 }
 
 void Player::initAnimations()
@@ -30,12 +31,12 @@ void Player::initAnimations()
 
 void Player::initPhysics()
 {
-	this->velocityMax = 22.f;
+	this->velocityMax = 10.f;
 	this->velocityMin = 1.f;
-	this->acceleration = 4.f;
-	this->drag = 0.87f;
-	this->gravity = 4.f;
-	this->velocityMaxY = 15.f;
+	this->acceleration = 3.f;
+	this->drag = 0.9f;
+	this->gravity = 1.0f;
+	this->velocityMaxY = 1.f;
 }
 
 Player::Player()
@@ -45,6 +46,8 @@ Player::Player()
 	this->initSprite();
 	this->initAnimations();
 	this->initPhysics();
+
+	this->movementSpeed = 5.f;
 }
 
 Player::~Player()
@@ -76,6 +79,11 @@ void Player::setPosition(const float x, const float y)
 	this->sprite.setPosition(x, y);
 }
 
+void Player::resetVelocityX()
+{
+	this->velocity.x = 0.f;
+}
+
 void Player::resetVelocityY()
 {
 	this->velocity.y = 0.f;
@@ -91,6 +99,8 @@ void Player::resetAnimationTimer()
 
 void Player::move(const float dir_x, const float dir_y)
 {
+	this->sprite.move(this->movementSpeed * dir_x, this->movementSpeed * dir_y);
+
 	//Acceleration 
 	this->velocity.x += dir_x * this->acceleration;
 
@@ -103,12 +113,26 @@ void Player::move(const float dir_x, const float dir_y)
 
 void Player::updatePhysics()
 {
-	//Gravity
-	this->velocity.y += 1.0 * this->gravity;
-	if (std::abs(this->velocity.x) > this->velocityMaxY)
+	//Jumping
+	if (this->jumping == true && this->gravityBool == false)
 	{
-		this->velocity.x = this->velocityMaxY * ((this->velocity.y < 0.f) ? -1.f : 1.f);
+		if (this->velocity.y < 0)//peak Vy=0
+			this->jumpingUp = false;
+		if (this->jumpingUp == true)//jumping
+			this->velocity.y -= 1.f;
+		else
+		{
+			//Gravity
+			this->velocity.y += (1.0 * this->gravity);
+			if (std::abs(this->velocity.x) > this->velocityMaxY)
+				this->velocity.y = this->velocityMaxY * ((this->velocity.y < 0.f) ? -1.f : 1.f);
+		}
 	}
+	else
+		this->velocity.y += (1.0 * this->gravity);
+
+	if(this->gravityBool == true)
+		this->velocity.y += (1.0 * this->gravity);
 
 	//Deceleration
 	this->velocity *= this->drag;
@@ -127,24 +151,36 @@ void Player::updateMovement()
 	this->animState = PLAYER_ANIMATION_STATES::IDLE;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))//Left
 	{
-		this->sprite.move(-3.f, 0.f);
-		this->animState = PLAYER_ANIMATION_STATES::MOVING_LEFT;
+		if (this->getPosition().x > 0)
+		{
+			this->sprite.move(-3.f, 0.f);
+			this->animState = PLAYER_ANIMATION_STATES::MOVING_LEFT;
+		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))//Right
 	{
-		this->sprite.move(3.f, 0.f);
-		this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
+		if (this->getPosition().x < 1000.f - this->sprite.getGlobalBounds().width + 30.f)
+		{
+			this->sprite.move(3.f, 0.f);
+			this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
+		}
 	}
-	/*else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//Top
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//Top
 	{
-		this->sprite.move(0.f, -3.f);
+		this->jumping = true;
+		this->jumpingUp = true;
+		this->gravityBool = true;
+
+		this->velocity.y = -30.f;
+
+		//this->sprite.move(0.f, -3.f);
 		this->animState = PLAYER_ANIMATION_STATES::JUMPING;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))//Down
 	{
 		this->sprite.move(0.f, 3.f);
 		this->animState = PLAYER_ANIMATION_STATES::FALLING;
-	}*/
+	}
 }
 
 void Player::updateAnimations()
@@ -170,7 +206,7 @@ void Player::updateAnimations()
 			this->animationTimer.restart();
 			this->sprite.setTextureRect(this->currentFrame);
 		}
-		this->sprite.setScale(5.f, 5.f);
+		this->sprite.setScale(4.f, 4.f);
 		this->sprite.setOrigin(0.f, 0.f);
 	}
 	else if (this->animState == PLAYER_ANIMATION_STATES::MOVING_LEFT)
@@ -185,8 +221,23 @@ void Player::updateAnimations()
 			this->animationTimer.restart();
 			this->sprite.setTextureRect(this->currentFrame);
 		}
-		this->sprite.setScale(-5.f, 5.f);
+		this->sprite.setScale(-4.f, 4.f);
 		this->sprite.setOrigin(this->sprite.getGlobalBounds().width /5,0.f);
+	}
+	else if (this->animState == PLAYER_ANIMATION_STATES::JUMPING)
+	{
+		if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2f)
+		{
+			this->currentFrame.top = 96.f;
+			this->currentFrame.left += 48.f;
+			if (this->currentFrame.left >= 144.f)
+				this->currentFrame.left = 0;
+
+			this->animationTimer.restart();
+			this->sprite.setTextureRect(this->currentFrame);
+		}
+		this->sprite.setScale(4.f, 4.f);
+		this->sprite.setOrigin(0.f, 0.f);
 	}
 	else
 		this->animationTimer.restart();//stop when not press key

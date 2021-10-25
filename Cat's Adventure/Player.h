@@ -23,12 +23,15 @@ private:
 	float gravity;
 	float velocityMaxY;
 
+
 	//Core
 	void initVariables();
 	void initTexture();
 	void initSprite();
 	void initAnimations();
 	void initPhysics();
+
+	float movementSpeed;
 
 public:
 	Player();
@@ -41,7 +44,13 @@ public:
 
 	//Modifiers
 	void setPosition(const float x, const float y);
+	void resetVelocityX();
 	void resetVelocityY();
+
+	//Jumping
+	bool jumping = false;//if jumping on
+	bool jumpingUp = false;//if jumping on and fall down
+	bool gravityBool = false; //open-close gravity
 
 	//Functions
 	void resetAnimationTimer();

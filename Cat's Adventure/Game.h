@@ -9,9 +9,16 @@ private:
 	sf::Event ev;
 
 	Player* player;
-	
+
+	//World
+	sf::Texture worldBackgroundTex;
+	sf::Sprite worldBackground;
+	float backgroundX = 0;
+
+	//Private function
 	void initWindow();
 	void initPlayer();
+	void initWorld();
 
 public:
 
@@ -22,8 +29,11 @@ public:
 	//Functions
 	void updatePlayer();
 	void updateCollision();
+	void updateWorld();
 	void update();
+
 	void rederPlayer();
+	void renderWorld();
 	void render();
 	const sf::RenderWindow& getWindow() const;
 };
