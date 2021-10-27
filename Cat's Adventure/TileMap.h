@@ -1,11 +1,14 @@
-#pragma once
+/*#pragma once
 
 #include"Tile.h"
 
 class TileMap
 {
 private:
-	std::vector<std::vector<Tile*> > tiles;
+	unsigned gridSizeU;
+	sf::Vector2u maxSize;
+	unsigned layers;
+	std::vector< std::vector< std::vector< Tile > > > map;
 
 public:
 	TileMap();
@@ -17,5 +20,5 @@ public:
 
 	void update();
 	void render();
-};
+};*/
 

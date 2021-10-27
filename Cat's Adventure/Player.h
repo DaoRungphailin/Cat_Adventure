@@ -8,11 +8,16 @@ private:
 	sf::Sprite sprite;
 	sf::Texture textureSheet;
 	sf::Clock animationTimer;
+	sf::Clock timeJumping;
 
 	//Animation
 	short animState;
 	sf::IntRect currentFrame;
 	bool animationSwitch;
+
+	//time
+	float delayJump;
+	bool changeJump = true;
 
 	//Physics
 	sf::Vector2f velocity;

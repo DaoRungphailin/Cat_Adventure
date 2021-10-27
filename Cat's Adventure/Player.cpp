@@ -17,7 +17,7 @@ void Player::initTexture()
 void Player::initSprite()
 {
 	this->sprite.setTexture(this->textureSheet);
-	this->currentFrame = sf::IntRect(0, 96, 50, 50);
+	this->currentFrame = sf::IntRect(0, 96, 48, 48);
 	this->sprite.setTextureRect(this->currentFrame);
 	this->sprite.setScale(4.f, 4.f);
 	this->sprite.setPosition(100.f, 900.f);
@@ -148,6 +148,7 @@ void Player::updatePhysics()
 
 void Player::updateMovement()
 {
+	this->delayJump = timeJumping.getElapsedTime().asSeconds();
 	this->animState = PLAYER_ANIMATION_STATES::IDLE;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))//Left
 	{
@@ -167,20 +168,25 @@ void Player::updateMovement()
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//Top
 	{
-		this->jumping = true;
-		this->jumpingUp = true;
-		this->gravityBool = true;
+		if (this->getPosition().y > 0)
+		{
+			if (delayJump > 0.02f)
+			{
+				this->jumping = true;
+				this->jumpingUp = true;
+				this->gravityBool = true;
+				this->velocity.y = -20.f;
+				this->timeJumping.restart();
+			}
+		}
 
-		this->velocity.y = -30.f;
-
-		//this->sprite.move(0.f, -3.f);
 		this->animState = PLAYER_ANIMATION_STATES::JUMPING;
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))//Down
+	/*else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))//Down
 	{
 		this->sprite.move(0.f, 3.f);
 		this->animState = PLAYER_ANIMATION_STATES::FALLING;
-	}
+	}*/
 }
 
 void Player::updateAnimations()
@@ -190,7 +196,10 @@ void Player::updateAnimations()
 		if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2f || this->getAnimSwitch())
 		{
 			this->currentFrame.top = 96.f;
-			this->currentFrame.left = 48.f;
+			this->currentFrame.left += 48.f;
+			if (this->currentFrame.left >= 144.f)
+				this->currentFrame.left = 0;
+			this->animationTimer.restart();
 			this->sprite.setTextureRect(this->currentFrame);
 		}
 	}
