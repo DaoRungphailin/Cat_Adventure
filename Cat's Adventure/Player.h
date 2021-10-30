@@ -1,4 +1,5 @@
 #pragma once
+#include "Coin.h"
 
 enum PLAYER_ANIMATION_STATES {IDLE=0,MOVING_LEFT, MOVING_RIGHT,JUMPING,FALLING};
 
@@ -41,6 +42,9 @@ private:
 public:
 	Player();
 	virtual ~Player();
+
+	//Coin
+	
 
 	//Accessors
 	const bool& getAnimSwitch();

@@ -55,6 +55,16 @@ Player::~Player()
 
 }
 
+/*bool Player::isCollidingWithCoin(Coin coin)
+{
+	if (this->sprite.getGlobalBounds().intersects(coin.getGlobalBounds()))
+	{
+		return true;
+	}
+	else
+		return false;
+}*/
+
 const bool& Player::getAnimSwitch()
 {
 	bool anim_switch = this->animationSwitch;

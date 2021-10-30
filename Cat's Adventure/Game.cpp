@@ -31,7 +31,30 @@ Game::Game()
 
 Game::~Game()
 {
+	//Player
 	delete this->player;
+
+	//Coin
+	for (auto* i : this->coin)
+	{
+		delete i;
+	}
+}
+
+void Game::updateCoin()
+{
+
+	if (this->randomTime.getElapsedTime().asSeconds() >= 0.5f)
+	{
+		temp = rand()%760;
+		this->coin.push_back(new Coin(temp,0.f));
+		this->randomTime.restart();
+	}
+
+	for (int i = 0; i < this->coin.size(); ++i)
+	{
+		this->coin[i]->update();
+	}
 }
 
 void Game::updatePlayer()
@@ -51,7 +74,6 @@ void Game::updateCollision()
 		this->player->gravityBool = false;
 	}
 }
-
 
 void Game::updateWorld()
 {
@@ -85,7 +107,16 @@ void Game::update()
 	this->updatePlayer();
 	this->updateCollision();
 	this->updateWorld();
+	this->updateCoin();
 }
+void Game::renderCoin()
+{
+	for (auto* i:this->coin)
+	{
+		i->render(this->window);
+	}
+}
+
 void Game::rederPlayer()
 {
 	this->player->render(this->window);//render players and send to window
@@ -104,6 +135,9 @@ void Game::render()
 
 	//Render game
 	this->rederPlayer();
+
+	//Render Coin
+	this->renderCoin();
 
 	this->window.display();
 }
