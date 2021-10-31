@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Coin.h"
+#include "Spike.h"
 
 class Game
 {
@@ -19,8 +20,15 @@ private:
 	//Coin
 	std::vector<Coin*> coin;
 	sf::Clock randomTime;
-	float temp = 0;
+	float tempX = 0;
+	float tempY = 0;
+	int countCoin = 0;
 
+	//Spike
+	std::vector<Spike*> spike;
+
+	//Score
+	int score = 0;
 
 	//World
 	sf::Texture worldBackgroundTex;
@@ -34,12 +42,14 @@ public:
 	virtual ~Game();
 
 	//Functions
+	void updateSpike();
 	void updateCoin();
 	void updatePlayer();
 	void updateCollision();
 	void updateWorld();
 	void update();
 
+	void renderSpike();
 	void renderCoin();
 	void rederPlayer();
 	void renderWorld();

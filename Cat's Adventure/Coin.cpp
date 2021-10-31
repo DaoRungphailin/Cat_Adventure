@@ -32,6 +32,7 @@ Coin::Coin(float x, float y)
 	this->initSprite();
 	this->initAnimation();
 	this->setPosition(x, y);
+	coinX = x;
 }
 
 const sf::Vector2f Coin::getPosition()

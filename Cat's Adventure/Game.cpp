@@ -41,19 +41,40 @@ Game::~Game()
 	}
 }
 
-void Game::updateCoin()
+void Game::updateSpike()
 {
 
+}
+
+void Game::updateCoin()
+{
 	if (this->randomTime.getElapsedTime().asSeconds() >= 0.5f)
 	{
-		temp = rand()%760;
-		this->coin.push_back(new Coin(temp,0.f));
-		this->randomTime.restart();
+		if (countCoin < 12)
+		{
+			tempX = rand() % 900;
+			tempY = rand() % 650;
+			this->coin.push_back(new Coin(tempX,tempY));
+			this->randomTime.restart();
+			countCoin++;
+		}
 	}
 
 	for (int i = 0; i < this->coin.size(); ++i)
 	{
 		this->coin[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < coin.size(); i++)
+	{
+		if (this->player->getGlobalBounds().intersects(this->coin[i]->getGlobalbounds()))
+		{
+			coin.erase(coin.begin() + i);
+			score++;
+			countCoin--;
+			printf("score = %d\n", score);
+		}
 	}
 }
 
@@ -109,6 +130,11 @@ void Game::update()
 	this->updateWorld();
 	this->updateCoin();
 }
+
+void Game::renderSpike()
+{
+}
+
 void Game::renderCoin()
 {
 	for (auto* i:this->coin)
@@ -126,6 +152,7 @@ void Game::renderWorld()
 {
 	this->window.draw(this->worldBackground);
 }
+
 
 void Game::render()
 {
@@ -147,3 +174,4 @@ const sf::RenderWindow& Game::getWindow() const
 	// TODO: insert return statement here
 	return this->window;
 }
+

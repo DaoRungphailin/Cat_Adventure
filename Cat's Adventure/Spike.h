@@ -2,23 +2,18 @@
 
 #include "stdafx.h"
 
-class Coin
+class Spike
 {
 private:
-	sf::Sprite coin;
-	sf::Texture coinTex;
-	sf::IntRect currentFrame;
-	sf::Clock animationTimer;
-
-	float coinX;
+	sf::Sprite spike;
+	sf::Texture spikeTex;
 
 	void initSprite();
 	void initTexture();
-	void initAnimation();
 
 public:
-	virtual ~Coin();
-	Coin(float x, float y);
+	virtual ~Spike();
+	Spike(float x, float y);
 	const sf::Vector2f getPosition();
 	const sf::FloatRect getGlobalbounds();
 	void setPosition(float x, float y);
