@@ -22,6 +22,25 @@ void Coin::initAnimation()
 	this->animationTimer.restart();
 }
 
+void Coin::updateAnimation()
+{
+	if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2f)
+	{
+		this->currentFrame.top = 0.f;
+		this->currentFrame.left += 135.f;
+		if (this->currentFrame.left >= 810.f)
+			this->currentFrame.left = 0;
+		this->animationTimer.restart();
+		this->coin.setTextureRect(this->currentFrame);
+	}
+}
+
+void Coin::updateMovement()
+{
+	this->coin.setPosition(coinX, this->coin.getPosition().y);
+	coinX--;
+}
+
 Coin::~Coin()
 {
 }
@@ -52,15 +71,8 @@ void Coin::setPosition(float x, float y)
 
 void Coin::update()
 {
-	if (this->animationTimer.getElapsedTime().asSeconds() >= 0.2f)
-	{
-		this->currentFrame.top = 0.f;
-		this->currentFrame.left += 135.f;
-		if (this->currentFrame.left >= 810.f)
-			this->currentFrame.left = 0;
-		this->animationTimer.restart();
-		this->coin.setTextureRect(this->currentFrame);
-	}
+	this->updateAnimation();
+	this->updateMovement();
 }
 
 void Coin::render(sf::RenderTarget& target)

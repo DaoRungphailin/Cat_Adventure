@@ -73,8 +73,13 @@ void Game::updateCoin()
 			coin.erase(coin.begin() + i);
 			score++;
 			countCoin--;
-			printf("score = %d\n", score);
+			//printf("score = %d\n", score);
 		}
+		printf("%d\n", i);
+		/*if (this->coin[i]->getPosition().x < 0.f)
+		{
+			countCoin--;
+		}*/
 	}
 }
 

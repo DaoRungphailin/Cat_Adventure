@@ -43,9 +43,6 @@ public:
 	Player();
 	virtual ~Player();
 
-	//Coin
-	
-
 	//Accessors
 	const bool& getAnimSwitch();
 	const sf::Vector2f getPosition() const;
@@ -60,6 +57,8 @@ public:
 	bool jumping = false;//if jumping on
 	bool jumpingUp = false;//if jumping on and fall down
 	bool gravityBool = false; //open-close gravity
+	int jumpTimes = 0;
+	sf::Clock delayJumping;
 
 	//Functions
 	void resetAnimationTimer();

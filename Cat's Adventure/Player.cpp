@@ -35,7 +35,7 @@ void Player::initPhysics()
 	this->velocityMin = 1.f;
 	this->acceleration = 3.f;
 	this->drag = 0.9f;
-	this->gravity = 1.0f;
+	this->gravity = 0.6f;
 	this->velocityMaxY = 1.f;
 }
 
@@ -140,9 +140,15 @@ void Player::updatePhysics()
 	}
 	else
 		this->velocity.y += (1.0 * this->gravity);
+		
 
 	if(this->gravityBool == true)
 		this->velocity.y += (1.0 * this->gravity);
+
+	if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height > 650)
+	{
+		jumpTimes = 0;
+	}
 
 	//Deceleration
 	this->velocity *= this->drag;
@@ -168,7 +174,7 @@ void Player::updateMovement()
 			this->animState = PLAYER_ANIMATION_STATES::MOVING_LEFT;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))//Right
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))//Right
 	{
 		if (this->getPosition().x < 1000.f - this->sprite.getGlobalBounds().width + 30.f)
 		{
@@ -176,21 +182,23 @@ void Player::updateMovement()
 			this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;
 		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//Top
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//Top
 	{
 		if (this->getPosition().y > 0)
 		{
-			if (delayJump > 0.02f)
+			if (delayJump > 0.2f && jumpTimes < 1)
 			{
 				this->jumping = true;
 				this->jumpingUp = true;
 				this->gravityBool = true;
-				this->velocity.y = -20.f;
+				this->velocity.y = -50.f;
 				this->timeJumping.restart();
+				jumpTimes++;
+				//printf("%d\n", jumpTimes);
 			}
 		}
-
-		this->animState = PLAYER_ANIMATION_STATES::JUMPING;
+		//this->animState = PLAYER_ANIMATION_STATES::JUMPING;
+		
 	}
 	/*else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))//Down
 	{

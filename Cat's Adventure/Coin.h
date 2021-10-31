@@ -16,6 +16,10 @@ private:
 	void initTexture();
 	void initAnimation();
 
+	//Update
+	void updateAnimation();
+	void updateMovement();
+
 public:
 	virtual ~Coin();
 	Coin(float x, float y);

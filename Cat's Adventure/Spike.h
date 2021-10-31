@@ -8,6 +8,8 @@ private:
 	sf::Sprite spike;
 	sf::Texture spikeTex;
 
+	float spikeX;
+
 	void initSprite();
 	void initTexture();
 
