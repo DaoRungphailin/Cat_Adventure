@@ -59,7 +59,7 @@ void Game::updateSpike()
 	//Collision
 	for (size_t i = 0; i < spike.size(); i++)
 	{
-		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalbounds()) 
+		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
 			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f)
 		{
 			printf("hp = %f\n",hp);
@@ -93,7 +93,7 @@ void Game::updateCoin()
 	//Collision
 	for (size_t i = 0; i < coin.size(); i++)
 	{
-		if (this->player->getGlobalBoundsHitbox().intersects(this->coin[i]->getGlobalbounds()))
+		if (this->player->getGlobalBoundsHitbox().intersects(this->coin[i]->getGlobalBoundsHitbox()))
 		{
 			coin.erase(coin.begin() + i);
 			score++;

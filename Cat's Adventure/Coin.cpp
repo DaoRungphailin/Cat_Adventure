@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "coin.h"
 
+void Coin::initHitbox()
+{
+	coinHitbox.setOutlineColor(sf::Color::Green);
+	coinHitbox.setOutlineThickness(2.f);
+	coinHitbox.setFillColor(sf::Color::Transparent);
+	coinHitbox.setSize(sf::Vector2f(50.f, 50.f));
+}
+
 void Coin::initSprite()
 {
 	this->coin.setTexture(this->coinTex);
@@ -20,6 +28,11 @@ void Coin::initTexture()
 void Coin::initAnimation()
 {
 	this->animationTimer.restart();
+}
+
+void Coin::updateHitbox()
+{
+	coinHitbox.setPosition(coin.getPosition().x, coin.getPosition().y + 55.f);
 }
 
 void Coin::updateAnimation()
@@ -47,6 +60,7 @@ Coin::~Coin()
 
 Coin::Coin(float x, float y)
 {
+	this->initHitbox();
 	this->initTexture();
 	this->initSprite();
 	this->initAnimation();
@@ -69,8 +83,14 @@ void Coin::setPosition(float x, float y)
 	this->coin.setPosition(x, y);
 }
 
+const sf::FloatRect Coin::getGlobalBoundsHitbox() const
+{
+	return this->coinHitbox.getGlobalBounds();
+}
+
 void Coin::update()
 {
+	this->updateHitbox();
 	this->updateAnimation();
 	this->updateMovement();
 }

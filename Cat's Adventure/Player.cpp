@@ -4,7 +4,9 @@
 void Player::initHitbox()
 {
 	playerHitbox.setOutlineColor(sf::Color::Green);
-	playerHitbox.setSize(sf::Vector2f(130.f, 100.f));
+	playerHitbox.setOutlineThickness(2.f);
+	playerHitbox.setFillColor(sf::Color::Transparent);
+	playerHitbox.setSize(sf::Vector2f(135.f, 100.f));
 }
 
 void Player::initVariables()
@@ -61,16 +63,6 @@ Player::~Player()
 {
 
 }
-
-/*bool Player::isCollidingWithCoin(Coin coin)
-{
-	if (this->sprite.getGlobalBounds().intersects(coin.getGlobalBounds()))
-	{
-		return true;
-	}
-	else
-		return false;
-}*/
 
 const bool& Player::getAnimSwitch()
 {
@@ -135,7 +127,7 @@ void Player::move(const float dir_x, const float dir_y)
 
 void Player::updateHitbox()
 {
-	playerHitbox.setPosition(sprite.getPosition().x + 25.f, sprite.getPosition().y + 100.f);
+	playerHitbox.setPosition(sprite.getPosition().x + 25.f, sprite.getPosition().y + 95.f);
 }
 
 void Player::updatePhysics()

@@ -14,6 +14,7 @@ private:
 	//Hitbox
 	sf::RectangleShape playerHitbox;
 
+
 	//Animation
 	short animState;
 	sf::IntRect currentFrame;
@@ -53,7 +54,7 @@ public:
 	const sf::FloatRect getGlobalBounds() const;
 
 	//Hitbox
-		const sf::FloatRect getGlobalBoundsHitbox() const;
+	const sf::FloatRect getGlobalBoundsHitbox() const;
 
 	//Modifiers
 	void setPosition(const float x, const float y);
