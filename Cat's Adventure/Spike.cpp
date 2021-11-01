@@ -4,7 +4,7 @@
 void Spike::initSprite()
 {
 	this->spike.setTexture(this->spikeTex);
-	this->spike.setScale(0.4f, 0.4f);
+	this->spike.setScale(0.2f, 0.2f);
 }
 
 void Spike::initTexture()
@@ -24,6 +24,7 @@ Spike::Spike(float x, float y)
 	this->initTexture();
 	this->initSprite();
 	this->setPosition(x, y);
+	spikeX = x;
 }
 
 const sf::Vector2f Spike::getPosition()
@@ -43,6 +44,7 @@ void Spike::setPosition(float x, float y)
 
 void Spike::update()
 {
+	this->updateMovement();
 }
 
 void Spike::updateMovement()

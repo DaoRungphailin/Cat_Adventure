@@ -43,23 +43,48 @@ Game::~Game()
 
 void Game::updateSpike()
 {
+	//Count Spike
+	if(countSpike < 10)
+	{
+		spikeX += 500.f;
+		this->spike.push_back(new Spike(spikeX, 620.f));
+	}
 
+	//Update
+	for (int i = 0; i < this->spike.size(); ++i)
+	{
+		this->spike[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < spike.size(); i++)
+	{
+		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalbounds()) 
+			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f)
+		{
+			printf("hp = %f\n",hp);
+			hp -= 5.f;
+			this->delayCrash.restart();
+		}
+	}
 }
 
 void Game::updateCoin()
 {
+	//Random Coin
 	if (this->randomTime.getElapsedTime().asSeconds() >= 0.5f)
 	{
 		if (countCoin < 12)
 		{
-			tempX = rand() % 900;
-			tempY = rand() % 550;
-			this->coin.push_back(new Coin(tempX,tempY));
+			coinX = rand() % 900;
+			coinY = rand() % 550;
+			this->coin.push_back(new Coin(coinX,coinY));
 			this->randomTime.restart();
 			countCoin++;
 		}
 	}
 
+	//Update
 	for (int i = 0; i < this->coin.size(); ++i)
 	{
 		this->coin[i]->update();
@@ -134,10 +159,15 @@ void Game::update()
 	this->updateCollision();
 	this->updateWorld();
 	this->updateCoin();
+	this->updateSpike();
 }
 
 void Game::renderSpike()
 {
+	for (auto* i : this->spike)
+	{
+		i->render(this->window);
+	}
 }
 
 void Game::renderCoin()
@@ -171,6 +201,7 @@ void Game::render()
 	//Render Coin
 	this->renderCoin();
 
+	this->renderSpike();
 	this->window.display();
 }
 

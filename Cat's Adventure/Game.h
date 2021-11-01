@@ -20,15 +20,19 @@ private:
 	//Coin
 	std::vector<Coin*> coin;
 	sf::Clock randomTime;
-	float tempX = 0;
-	float tempY = 0;
+	float coinX = 0;
+	float coinY = 0;
 	int countCoin = 0;
 
 	//Spike
 	std::vector<Spike*> spike;
+	sf::Clock delayCrash;
+	int countSpike = 0;
+	float spikeX = 0;
 
-	//Score
+	//GUI
 	int score = 0;
+	float hp = 100.f;
 
 	//World
 	sf::Texture worldBackgroundTex;
