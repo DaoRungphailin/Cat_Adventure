@@ -45,6 +45,12 @@ void Spike::update()
 {
 }
 
+void Spike::updateMovement()
+{
+	this->spike.setPosition(spikeX, this->spike.getPosition().y);
+	spikeX--;
+}
+
 void Spike::render(sf::RenderTarget& target)
 {
 	target.draw(this->spike);

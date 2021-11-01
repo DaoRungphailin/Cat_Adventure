@@ -11,6 +11,9 @@ private:
 	sf::Clock animationTimer;
 	sf::Clock timeJumping;
 
+	//Hitbox
+	sf::RectangleShape playerHitbox;
+
 	//Animation
 	short animState;
 	sf::IntRect currentFrame;
@@ -31,6 +34,7 @@ private:
 
 
 	//Core
+	void initHitbox();
 	void initVariables();
 	void initTexture();
 	void initSprite();
@@ -48,6 +52,9 @@ public:
 	const sf::Vector2f getPosition() const;
 	const sf::FloatRect getGlobalBounds() const;
 
+	//Hitbox
+		const sf::FloatRect getGlobalBoundsHitbox() const;
+
 	//Modifiers
 	void setPosition(const float x, const float y);
 	void resetVelocityX();
@@ -63,6 +70,7 @@ public:
 	//Functions
 	void resetAnimationTimer();
 	void move(const float dir_x, const float dir_y);
+	void updateHitbox();
 	void updatePhysics();
 	void updateMovement();
 	void updateAnimations();

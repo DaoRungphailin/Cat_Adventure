@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "Player.h"
 
+void Player::initHitbox()
+{
+	playerHitbox.setOutlineColor(sf::Color::Green);
+	playerHitbox.setSize(sf::Vector2f(130.f, 100.f));
+}
+
 void Player::initVariables()
 {
 	this->animState = PLAYER_ANIMATION_STATES::IDLE;
@@ -46,6 +52,7 @@ Player::Player()
 	this->initSprite();
 	this->initAnimations();
 	this->initPhysics();
+	this->initHitbox();
 
 	this->movementSpeed = 5.f;
 }
@@ -84,6 +91,11 @@ const sf::FloatRect Player::getGlobalBounds() const
 	return this->sprite.getGlobalBounds();
 }
 
+const sf::FloatRect Player::getGlobalBoundsHitbox() const
+{
+	return this->playerHitbox.getGlobalBounds();
+}
+
 void Player::setPosition(const float x, const float y)
 {
 	this->sprite.setPosition(x, y);
@@ -119,6 +131,11 @@ void Player::move(const float dir_x, const float dir_y)
 	{
 		this->velocity.x = this->velocityMax * ((this->velocity.x < 0.f) ? -1.f : 1.f);
 	}
+}
+
+void Player::updateHitbox()
+{
+	playerHitbox.setPosition(sprite.getPosition().x + 25.f, sprite.getPosition().y + 100.f);
 }
 
 void Player::updatePhysics()
@@ -275,6 +292,7 @@ void Player::update()
 	this->updateMovement();
 	this->updateAnimations();
 	this->updatePhysics();
+	this->updateHitbox();
 }
 
 void Player::render(sf::RenderTarget& target)

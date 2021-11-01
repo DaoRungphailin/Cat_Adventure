@@ -53,7 +53,7 @@ void Game::updateCoin()
 		if (countCoin < 12)
 		{
 			tempX = rand() % 900;
-			tempY = rand() % 650;
+			tempY = rand() % 550;
 			this->coin.push_back(new Coin(tempX,tempY));
 			this->randomTime.restart();
 			countCoin++;
@@ -68,14 +68,14 @@ void Game::updateCoin()
 	//Collision
 	for (size_t i = 0; i < coin.size(); i++)
 	{
-		if (this->player->getGlobalBounds().intersects(this->coin[i]->getGlobalbounds()))
+		if (this->player->getGlobalBoundsHitbox().intersects(this->coin[i]->getGlobalbounds()))
 		{
 			coin.erase(coin.begin() + i);
 			score++;
 			countCoin--;
 			//printf("score = %d\n", score);
 		}
-		printf("%d\n", i);
+		//printf("%d\n", i);
 		/*if (this->coin[i]->getPosition().x < 0.f)
 		{
 			countCoin--;
