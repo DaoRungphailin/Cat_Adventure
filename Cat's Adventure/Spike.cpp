@@ -6,13 +6,13 @@ void Spike::initHitbox()
 	spikeHitbox.setOutlineColor(sf::Color::Red);
 	spikeHitbox.setOutlineThickness(2.f);
 	spikeHitbox.setFillColor(sf::Color::Transparent);
-	spikeHitbox.setSize(sf::Vector2f(75.f, 50.f));
+	spikeHitbox.setSize(sf::Vector2f(70.f, 50.f));
 }
 
 void Spike::initSprite()
 {
 	this->spike.setTexture(this->spikeTex);
-	this->spike.setScale(0.2f, 0.2f);
+	this->spike.setScale(0.18f, 0.18f);
 }
 
 void Spike::initTexture()
@@ -70,10 +70,11 @@ void Spike::updateHitbox()
 void Spike::updateMovement()
 {
 	this->spike.setPosition(spikeX, this->spike.getPosition().y);
-	spikeX--;
+	spikeX -= 2;
 }
 
 void Spike::render(sf::RenderTarget& target)
 {
 	target.draw(this->spike);
+	//target.draw(this->spikeHitbox);
 }

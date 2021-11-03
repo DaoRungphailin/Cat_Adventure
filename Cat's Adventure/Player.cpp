@@ -56,7 +56,7 @@ Player::Player()
 	this->initPhysics();
 	this->initHitbox();
 
-	this->movementSpeed = 7.f;
+	this->movementSpeed = 9.f;
 }
 
 Player::~Player()
@@ -290,4 +290,5 @@ void Player::update()
 void Player::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
+	//target.draw(this->playerHitbox);
 }

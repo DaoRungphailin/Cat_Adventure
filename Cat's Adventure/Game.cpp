@@ -22,11 +22,23 @@ void Game::initWorld()
 	this->worldBackground.setTexture(this->worldBackgroundTex);
 }
 
+void Game::initHpBar()
+{
+	this->hpBar = new PlayerGUI();
+}
+
+void Game::initGUI()
+{
+	this->playerGUI = new PlayerGUI();
+}
+
 Game::Game()
 {
 	this->initWindow();
 	this->initPlayer();
 	this->initWorld();
+	this->initGUI();
+	this->initHpBar();
 }
 
 Game::~Game()
@@ -39,6 +51,11 @@ Game::~Game()
 	{
 		delete i;
 	}
+}
+
+void Game::updateHpBar()
+{
+	this->playerGUI->update();
 }
 
 void Game::updateSpike()
@@ -62,8 +79,8 @@ void Game::updateSpike()
 		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
 			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f)
 		{
-			printf("hp = %f\n",hp);
-			hp -= 5.f;
+			printf("hp = %d\n",this->playerGUI->hp);
+			this->playerGUI->setHp(-5);
 			this->delayCrash.restart();
 		}
 	}
@@ -77,8 +94,8 @@ void Game::updateCoin()
 		if (countCoin < 12)
 		{
 			coinX = rand() % 900;
-			coinY = rand() % 550;
-			this->coin.push_back(new Coin(coinX,coinY));
+			coinY = rand() % 520;
+			this->coin.push_back(new Coin(coinX, coinY));
 			this->randomTime.restart();
 			countCoin++;
 		}
@@ -91,14 +108,14 @@ void Game::updateCoin()
 	}
 
 	//Collision
-	for (size_t i = 0; i < coin.size(); i++)
+	for (size_t i = 0; i < coin.size() ; i++)
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->coin[i]->getGlobalBoundsHitbox()))
 		{
 			coin.erase(coin.begin() + i);
-			score++;
+			this->playerGUI->setScore(1);
 			countCoin--;
-			//printf("score = %d\n", score);
+			//printf("score = %d\n", this->playerGUI->score);
 		}
 		//printf("%d\n", i);
 		/*if (this->coin[i]->getPosition().x < 0.f)
@@ -160,6 +177,7 @@ void Game::update()
 	this->updateWorld();
 	this->updateCoin();
 	this->updateSpike();
+	this->updateHpBar();
 }
 
 void Game::renderSpike()
@@ -168,6 +186,11 @@ void Game::renderSpike()
 	{
 		i->render(this->window);
 	}
+}
+
+void Game::renderHpBar()
+{
+	this->playerGUI->render(this->window);
 }
 
 void Game::renderCoin()
@@ -201,7 +224,12 @@ void Game::render()
 	//Render Coin
 	this->renderCoin();
 
+	//Render Spike
 	this->renderSpike();
+
+	//Render HpBar
+	this->renderHpBar();
+
 	this->window.display();
 }
 

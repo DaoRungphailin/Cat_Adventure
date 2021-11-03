@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Coin.h"
 #include "Spike.h"
+#include "PlayerGUI.h"
 
 class Game
 {
@@ -16,6 +17,8 @@ private:
 	void initWindow();
 	void initPlayer();
 	void initWorld();
+	void initHpBar();
+	void initGUI();
 
 	//Coin
 	std::vector<Coin*> coin;
@@ -31,8 +34,8 @@ private:
 	float spikeX = 0;
 
 	//GUI
-	int score = 0;
-	float hp = 100.f;
+	PlayerGUI* playerGUI;
+	PlayerGUI* hpBar;
 
 	//World
 	sf::Texture worldBackgroundTex;
@@ -46,6 +49,7 @@ public:
 	virtual ~Game();
 
 	//Functions
+	void updateHpBar();
 	void updateSpike();
 	void updateCoin();
 	void updatePlayer();
@@ -53,6 +57,7 @@ public:
 	void updateWorld();
 	void update();
 
+	void renderHpBar();
 	void renderSpike();
 	void renderCoin();
 	void rederPlayer();
