@@ -120,7 +120,13 @@ void Game::updateCoin()
 		//printf("%d\n", i);
 		/*if (this->coin[i]->getPosition().x < 0.f)
 		{
-			countCoin--;
+			//printf("no");
+			try { coin.erase(coin.begin() + i); printf("yes"); }
+			catch (std::out_of_range err);
+			{
+				//printf("no");
+				countCoin--;
+			}
 		}*/
 	}
 }
@@ -188,7 +194,7 @@ void Game::renderSpike()
 	}
 }
 
-void Game::renderHpBar()
+void Game::renderGUI()
 {
 	this->playerGUI->render(this->window);
 }
@@ -228,7 +234,7 @@ void Game::render()
 	this->renderSpike();
 
 	//Render HpBar
-	this->renderHpBar();
+	this->renderGUI();
 
 	this->window.display();
 }

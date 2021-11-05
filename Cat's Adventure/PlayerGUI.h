@@ -5,12 +5,21 @@ class PlayerGUI
 private:
 	
 	sf::Font font;
+
+	//Score Bar
+	std::string scoreString;
+	sf::Text scoreText;
+
+	//HP Bar
+	std::string hpBarString;
+	sf::Text hpBarText;
 	float hpBarMaxWidth;
 	sf::RectangleShape hpBarBack;
 	sf::RectangleShape hpBarInner;
 
 	void initFont();
 	void initHpBar();
+	void initScoreBar();
 
 public:
 	PlayerGUI();
@@ -22,9 +31,11 @@ public:
 	//Function
 	void setScore(int n);
 	void setHp(int n);
+	void updateScore();
 	void updateHpBar();
 	void update();
 
+	void renderScore(sf::RenderTarget& target);
 	void renderHpBar(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
 };

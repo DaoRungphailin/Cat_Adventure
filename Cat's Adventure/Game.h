@@ -57,7 +57,7 @@ public:
 	void updateWorld();
 	void update();
 
-	void renderHpBar();
+	void renderGUI();
 	void renderSpike();
 	void renderCoin();
 	void rederPlayer();
