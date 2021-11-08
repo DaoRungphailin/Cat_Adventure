@@ -4,10 +4,10 @@ class Shield
 private:
 	sf::Sprite shield;
 	sf::Texture shieldTex;
-	float heartX;
+	float shieldX;
 
 	//Hitbox
-	sf::RectangleShape heartHitbox;
+	sf::RectangleShape shieldHitbox;
 
 	void initHitbox();
 	void initSprite();
@@ -19,7 +19,7 @@ private:
 public:
 	virtual ~Shield();
 
-	HeartItem(float x, float y);
+	Shield(float x, float y);
 
 	const sf::Vector2f getPosition();
 	const sf::FloatRect getGlobalbounds() const;

@@ -5,6 +5,7 @@
 #include "Spike.h"
 #include "PlayerGUI.h"
 #include "HeartItem.h"
+#include "Shield.h"
 
 class Game
 {
@@ -29,6 +30,14 @@ private:
 	float heartX = 0;
 	float heartY = 0;
 	int countHeart = 0;
+
+	/*Shield*/
+	std::vector<Shield*> shield;
+	sf::Clock randomShield;
+	sf::Clock delayShield;
+	float shieldX = 0;
+	float shieldY = 0;
+	int countShield = 0;
 
 	//Coin
 	std::vector<Coin*> coin;
@@ -59,6 +68,7 @@ public:
 	virtual ~Game();
 
 	//Functions
+	void updateShield();
 	void updateHeartItem();
 	void updateHpBar();
 	void updateSpike();
@@ -68,6 +78,7 @@ public:
 	void updateWorld();
 	void update();
 
+	void renderShield();
 	void renderHeartItem();
 	void renderGUI();
 	void renderSpike();

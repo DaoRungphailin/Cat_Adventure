@@ -33,7 +33,7 @@ void PlayerGUI::initScoreBar()
 	this->scoreText.setFont(this->font);
 	this->scoreText.setFillColor(sf::Color::Black); //(255, 235, 59, 500)
 	this->scoreText.setCharacterSize(40.f);
-	this->scoreText.setPosition(800.f, 10.f);
+	this->scoreText.setPosition(1500.f, 10.f);
 }
 
 PlayerGUI::PlayerGUI()

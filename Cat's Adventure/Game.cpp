@@ -4,7 +4,7 @@
 
 void Game::initWindow()
 {
-	this->window.create(sf::VideoMode(1000.f, 760.f), "Cat's Adventure", sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings());
+	this->window.create(sf::VideoMode(1700.f, 760.f), "Cat's Adventure", sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings());
 	this->window.setFramerateLimit(60);
 }
 
@@ -51,6 +51,7 @@ Game::~Game()
 	{ 
 		delete i;
 	}
+
 	//Spike
 	for (auto* i : this->spike)
 	{
@@ -62,6 +63,61 @@ Game::~Game()
 	{
 		delete i;
 	}
+
+	//Shield
+	for (auto* i : this->shield)
+	{
+		delete i;
+	}
+}
+
+void Game::updateShield()
+{
+	//Count Shield
+	if (this->randomShield.getElapsedTime().asSeconds() >= 0.5f)
+	{
+		if (countShield <= 1)
+		{
+			shieldX = 70 + rand() % 1500;
+			shieldY = 100 + rand() % 900;
+			this->shield.push_back(new Shield(shieldX,shieldY));
+			this->randomShield.restart();
+			countShield++;
+		}
+	}
+
+	//Update
+	for (int i = 0; i < this->shield.size(); ++i)
+	{
+		this->shield[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < this->shield.size(); i++)
+	{
+		if (this->player->getGlobalBoundsHitbox().intersects(this->shield[i]->getGlobalBoundsHitbox())
+			&& this->delayShield.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp >= 0)
+		{
+			printf("OK");
+			//Do not decrease Hp
+			this->playerGUI->setHp(0);
+
+			//Delete Shield
+			this->shield.erase(this->shield.begin() + i);
+			countShield--;
+			break;
+
+			this->delayShield.restart();
+		}
+
+		//Left of screen
+		if (this->shield[i]->getPosition().x < 0)
+		{
+			this->shield.erase(this->shield.begin() + i);
+			countShield--;
+			break;
+		}
+	}
 }
 
 void Game::updateHeartItem()
@@ -71,8 +127,8 @@ void Game::updateHeartItem()
 	{
 		if (countHeart < 1)
 		{
-			heartX = rand() % 900;
-			heartY = rand() % 520;
+			heartX = 60 + rand() % 1500;
+			heartY = 100 + rand() % 500;
 			this->heartItem.push_back(new HeartItem(heartX, heartY));
 			this->randomHeart.restart();
 			countHeart++;
@@ -92,7 +148,7 @@ void Game::updateHeartItem()
 			&& this->delayHeart.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp <= 70)
 		{
 			//Boost Hp
-			this->playerGUI->setHp(+30);
+			this->playerGUI->setHp(30);
 
 			//Delete heart
 			this->heartItem.erase(this->heartItem.begin() + i);
@@ -123,7 +179,7 @@ void Game::updateSpike()
 	if(countSpike < 10)
 	{
 		spikeX += 500.f;
-		this->spike.push_back(new Spike(spikeX, 620.f));
+		this->spike.push_back(new Spike(spikeX, 610));
 	}
 
 	//Update
@@ -161,8 +217,8 @@ void Game::updateCoin()
 	{
 		if (countCoin < 12)
 		{
-			coinX = rand() % 900;
-			coinY = rand() % 520;
+			coinX = rand() % 1700;
+			coinY = rand() % 500;
 			this->coin.push_back(new Coin(coinX, coinY));
 			this->randomCoin.restart();
 			countCoin++;
@@ -251,11 +307,20 @@ void Game::update()
 	this->updateSpike();
 	this->updateHpBar();
 	this->updateHeartItem();
+	this->updateShield();
 }
 
 void Game::renderSpike()
 {
 	for (auto* i : this->spike)
+	{
+		i->render(this->window);
+	}
+}
+
+void Game::renderShield()
+{
+	for (auto* i : this->shield)
 	{
 		i->render(this->window);
 	}
@@ -313,6 +378,7 @@ void Game::render()
 
 	//Render Item
 	this->renderHeartItem();
+	this->renderShield();
 
 	this->window.display();
 }

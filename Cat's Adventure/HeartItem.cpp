@@ -6,13 +6,12 @@ void HeartItem::initHitbox()
 	this->heartHitbox.setOutlineColor(sf::Color::Magenta);
 	this->heartHitbox.setOutlineThickness(2.f);
 	this->heartHitbox.setFillColor(sf::Color::Transparent);
-	this->heartHitbox.setSize(sf::Vector2f(50.f, 50.f));
+	this->heartHitbox.setSize(sf::Vector2f(57.f, 55.f));
 }
 
 void HeartItem::initSprite()
 {
 	this->heart.setTexture(this->heartTex);
-	//this->heart.setScale(0.5f, 0.5f);
 }
 
 void HeartItem::initTexture()
@@ -25,7 +24,7 @@ void HeartItem::initTexture()
 
 void HeartItem::updateHitbox()
 {
-	this->heartHitbox.setPosition(heart.getPosition().x + 2.f, heart.getPosition().y + 2.f);
+	this->heartHitbox.setPosition(heart.getPosition().x + 2.5f, heart.getPosition().y + 2.f);
 }
 
 void HeartItem::updateMovement()
