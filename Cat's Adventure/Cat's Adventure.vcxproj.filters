@@ -36,6 +36,12 @@
     <ClCompile Include="PlayerGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HeartItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shield.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeartItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shield.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

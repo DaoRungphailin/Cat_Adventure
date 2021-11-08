@@ -48,8 +48,67 @@ Game::~Game()
 
 	//Coin
 	for (auto* i : this->coin)
+	{ 
+		delete i;
+	}
+	//Spike
+	for (auto* i : this->spike)
 	{
 		delete i;
+	}
+
+	//Boost Hp
+	for (auto* i : this->heartItem)
+	{
+		delete i;
+	}
+}
+
+void Game::updateHeartItem()
+{
+	//Count Heart
+	if (this->randomHeart.getElapsedTime().asSeconds() >= 0.5f)
+	{
+		if (countHeart < 1)
+		{
+			heartX = rand() % 900;
+			heartY = rand() % 520;
+			this->heartItem.push_back(new HeartItem(heartX, heartY));
+			this->randomHeart.restart();
+			countHeart++;
+		}
+	}
+
+	//Update
+	for (int i = 0; i < this->heartItem.size(); ++i)
+	{
+		this->heartItem[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < heartItem.size(); i++)
+	{
+		if (this->player->getGlobalBoundsHitbox().intersects(this->heartItem[i]->getGlobalbounds()) 
+			&& this->delayHeart.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp <= 70)
+		{
+			//Boost Hp
+			this->playerGUI->setHp(+30);
+
+			//Delete heart
+			this->heartItem.erase(this->heartItem.begin() + i);
+			countHeart--;
+			break;
+
+			this->delayHeart.restart();
+		}
+
+		//Left of screen
+		if (this->heartItem[i]->getPosition().x < 0)
+		{
+			this->heartItem.erase(this->heartItem.begin() + i);
+			countHeart--;
+			break;
+		}
 	}
 }
 
@@ -77,10 +136,10 @@ void Game::updateSpike()
 	for (size_t i = 0; i < spike.size(); i++)
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
-			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f)
+			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f && this->playerGUI->hp >= 10)
 		{
+				this->playerGUI->setHp(-10);
 				printf("hp = %d\n",this->playerGUI->hp);
-				this->playerGUI->setHp(-5);
 				this->delayCrash.restart();
 		}
 
@@ -98,14 +157,14 @@ void Game::updateSpike()
 void Game::updateCoin()
 {
 	//Random Coin
-	if (this->randomTime.getElapsedTime().asSeconds() >= 0.5f)
+	if (this->randomCoin.getElapsedTime().asSeconds() >= 0.5f)
 	{
 		if (countCoin < 12)
 		{
 			coinX = rand() % 900;
 			coinY = rand() % 520;
 			this->coin.push_back(new Coin(coinX, coinY));
-			this->randomTime.restart();
+			this->randomCoin.restart();
 			countCoin++;
 		}
 	}
@@ -191,11 +250,20 @@ void Game::update()
 	this->updateCoin();
 	this->updateSpike();
 	this->updateHpBar();
+	this->updateHeartItem();
 }
 
 void Game::renderSpike()
 {
 	for (auto* i : this->spike)
+	{
+		i->render(this->window);
+	}
+}
+
+void Game::renderHeartItem()
+{
+	for (auto* i : this->heartItem)
 	{
 		i->render(this->window);
 	}
@@ -242,6 +310,9 @@ void Game::render()
 
 	//Render HpBar
 	this->renderGUI();
+
+	//Render Item
+	this->renderHeartItem();
 
 	this->window.display();
 }

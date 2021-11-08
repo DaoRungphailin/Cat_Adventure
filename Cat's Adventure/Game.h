@@ -4,6 +4,7 @@
 #include "Coin.h"
 #include "Spike.h"
 #include "PlayerGUI.h"
+#include "HeartItem.h"
 
 class Game
 {
@@ -20,9 +21,18 @@ private:
 	void initHpBar();
 	void initGUI();
 
+	//Item
+	/*Boost Hp*/
+	std::vector<HeartItem*> heartItem;
+	sf::Clock randomHeart;
+	sf::Clock delayHeart;
+	float heartX = 0;
+	float heartY = 0;
+	int countHeart = 0;
+
 	//Coin
 	std::vector<Coin*> coin;
-	sf::Clock randomTime;
+	sf::Clock randomCoin;
 	float coinX = 0;
 	float coinY = 0;
 	int countCoin = 0;
@@ -49,6 +59,7 @@ public:
 	virtual ~Game();
 
 	//Functions
+	void updateHeartItem();
 	void updateHpBar();
 	void updateSpike();
 	void updateCoin();
@@ -57,6 +68,7 @@ public:
 	void updateWorld();
 	void update();
 
+	void renderHeartItem();
 	void renderGUI();
 	void renderSpike();
 	void renderCoin();

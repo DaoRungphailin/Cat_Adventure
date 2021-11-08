@@ -151,9 +151,11 @@
   <ItemGroup>
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HeartItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerGUI.cpp" />
+    <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Spike.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -165,8 +167,10 @@
   <ItemGroup>
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HeartItem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerGUI.h" />
+    <ClInclude Include="Shield.h" />
     <ClInclude Include="Spike.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
