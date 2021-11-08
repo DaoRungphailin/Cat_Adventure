@@ -5,7 +5,7 @@
 void Game::initWindow()
 {
 	this->window.create(sf::VideoMode(1000.f, 760.f), "Cat's Adventure", sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings());
-	this->window.setFramerateLimit(144);
+	this->window.setFramerateLimit(60);
 }
 
 void Game::initPlayer()
@@ -79,11 +79,20 @@ void Game::updateSpike()
 		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
 			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f)
 		{
-			printf("hp = %d\n",this->playerGUI->hp);
-			this->playerGUI->setHp(-5);
-			this->delayCrash.restart();
+				printf("hp = %d\n",this->playerGUI->hp);
+				this->playerGUI->setHp(-5);
+				this->delayCrash.restart();
+		}
+
+		//Left of screen
+		if (this->spike[i]->getPosition().x < 0)
+		{
+			this->spike.erase(this->spike.begin() + i);
+			countSpike--;
+			break;
 		}
 	}
+
 }
 
 void Game::updateCoin()
@@ -112,22 +121,20 @@ void Game::updateCoin()
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->coin[i]->getGlobalBoundsHitbox()))
 		{
-			coin.erase(coin.begin() + i);
+			this->coin.erase(this->coin.begin() + i);
 			this->playerGUI->setScore(1);
 			countCoin--;
+			break;
 			//printf("score = %d\n", this->playerGUI->score);
 		}
-		//printf("%d\n", i);
-		/*if (this->coin[i]->getPosition().x < 0.f)
+
+	//Left of Screen
+		if (this->coin[i]->getPosition().x < 0)
 		{
-			//printf("no");
-			try { coin.erase(coin.begin() + i); printf("yes"); }
-			catch (std::out_of_range err);
-			{
-				//printf("no");
-				countCoin--;
-			}
-		}*/
+			this->coin.erase(this->coin.begin() + i);
+			countCoin--;
+			break;
+		}
 	}
 }
 

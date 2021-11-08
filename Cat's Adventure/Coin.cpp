@@ -3,10 +3,10 @@
 
 void Coin::initHitbox()
 {
-	coinHitbox.setOutlineColor(sf::Color::Green);
-	coinHitbox.setOutlineThickness(2.f);
-	coinHitbox.setFillColor(sf::Color::Transparent);
-	coinHitbox.setSize(sf::Vector2f(50.f, 50.f));
+	this->coinHitbox.setOutlineColor(sf::Color::Green);
+	this->coinHitbox.setOutlineThickness(2.f);
+	this->coinHitbox.setFillColor(sf::Color::Transparent);
+	this->coinHitbox.setSize(sf::Vector2f(50.f, 50.f));
 }
 
 void Coin::initSprite()
@@ -32,7 +32,7 @@ void Coin::initAnimation()
 
 void Coin::updateHitbox()
 {
-	coinHitbox.setPosition(coin.getPosition().x, coin.getPosition().y + 55.f);
+	this->coinHitbox.setPosition(coin.getPosition().x, coin.getPosition().y + 55.f);
 }
 
 void Coin::updateAnimation()

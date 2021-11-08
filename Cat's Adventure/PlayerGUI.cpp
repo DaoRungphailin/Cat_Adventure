@@ -58,7 +58,7 @@ void PlayerGUI::setScore(int n)
 
 void PlayerGUI::setHp(int n)
 {
-	if(this->hp >= 5)
+	if(this->hp >= 0)
 		this->hp += n;
 }
 

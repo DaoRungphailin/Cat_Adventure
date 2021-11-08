@@ -56,7 +56,7 @@ Player::Player()
 	this->initPhysics();
 	this->initHitbox();
 
-	this->movementSpeed = 9.f;
+	this->movementSpeed = 13.f;
 }
 
 Player::~Player()
