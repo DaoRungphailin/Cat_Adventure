@@ -6,6 +6,7 @@
 #include "PlayerGUI.h"
 #include "HeartItem.h"
 #include "Shield.h"
+#include "Menu.h"
 
 class Game
 {
@@ -21,6 +22,7 @@ private:
 	void initWorld();
 	void initHpBar();
 	void initGUI();
+	void initMenu();
 
 	//Item
 	/*Boost Hp*/
@@ -35,6 +37,9 @@ private:
 	std::vector<Shield*> shield;
 	sf::Clock randomShield;
 	sf::Clock delayShield;
+	sf::Clock delayAura;
+	bool IsStart = false;
+	bool IsAura = false;
 	float shieldX = 0;
 	float shieldY = 0;
 	int countShield = 0;
@@ -61,6 +66,10 @@ private:
 	sf::Sprite worldBackground;
 	float backgroundX = 0;
 
+	//Main Menu
+	Menu* menu;
+	bool IsOpen = false;
+
 public:
 
 	//Functions
@@ -85,6 +94,7 @@ public:
 	void renderCoin();
 	void rederPlayer();
 	void renderWorld();
+	void renderMenu();
 	void render();
 	const sf::RenderWindow& getWindow() const;
 };

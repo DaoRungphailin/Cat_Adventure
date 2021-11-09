@@ -32,11 +32,17 @@ void Game::initGUI()
 	this->playerGUI = new PlayerGUI();
 }
 
+void Game::initMenu()
+{
+	this->menu = new Menu(window.getSize().x, window.getSize().y);
+}
+
 Game::Game()
 {
 	this->initWindow();
 	this->initPlayer();
 	this->initWorld();
+	this->initMenu();
 	this->initGUI();
 	this->initHpBar();
 }
@@ -76,10 +82,10 @@ void Game::updateShield()
 	//Count Shield
 	if (this->randomShield.getElapsedTime().asSeconds() >= 0.5f)
 	{
-		if (countShield <= 1)
+		if (countShield < 1)
 		{
 			shieldX = 70 + rand() % 1500;
-			shieldY = 100 + rand() % 900;
+			shieldY = 100 + rand() % 450;
 			this->shield.push_back(new Shield(shieldX,shieldY));
 			this->randomShield.restart();
 			countShield++;
@@ -98,16 +104,18 @@ void Game::updateShield()
 		if (this->player->getGlobalBoundsHitbox().intersects(this->shield[i]->getGlobalBoundsHitbox())
 			&& this->delayShield.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp >= 0)
 		{
-			printf("OK");
 			//Do not decrease Hp
 			this->playerGUI->setHp(0);
+			IsAura = true;
+			IsStart = true;
 
 			//Delete Shield
 			this->shield.erase(this->shield.begin() + i);
 			countShield--;
-			break;
-
+			
 			this->delayShield.restart();
+			this->delayAura.restart();
+			break;
 		}
 
 		//Left of screen
@@ -145,10 +153,10 @@ void Game::updateHeartItem()
 	for (size_t i = 0; i < heartItem.size(); i++)
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->heartItem[i]->getGlobalbounds()) 
-			&& this->delayHeart.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp <= 70)
+			&& this->delayHeart.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp <= 80)
 		{
 			//Boost Hp
-			this->playerGUI->setHp(30);
+			this->playerGUI->setHp(20);
 
 			//Delete heart
 			this->heartItem.erase(this->heartItem.begin() + i);
@@ -192,7 +200,9 @@ void Game::updateSpike()
 	for (size_t i = 0; i < spike.size(); i++)
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
-			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f && this->playerGUI->hp >= 10)
+			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f && this->playerGUI->hp >= 10
+			&& this->delayAura.getElapsedTime().asSeconds() >= 5.f
+			&& IsStart == true)
 		{
 				this->playerGUI->setHp(-10);
 				printf("hp = %d\n",this->playerGUI->hp);
@@ -284,7 +294,7 @@ void Game::update()
 	{
 		if (this->ev.type == sf::Event::Closed)
 			this->window.close();
-		else if(this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
+		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
 			this->window.close();
 
 		if (
@@ -299,15 +309,58 @@ void Game::update()
 		{
 			this->player->resetAnimationTimer();
 		}
+
+		//Set Menu
+		switch (ev.type)
+		{
+		case sf::Event::KeyReleased:
+			switch (ev.key.code)
+			{
+			case sf::Keyboard::Up:
+				this->menu->moveUp();
+				break;
+
+			case sf::Keyboard::Down:
+				this->menu->moveDown();
+				break;
+
+			case sf::Keyboard::Return:
+
+				switch (menu->getPressedItem())
+				{
+				case 0:
+					printf("Player has been pressed");
+					//go to state
+					IsOpen = true;
+					break;
+
+				case 1:
+					//go to state
+					printf("Leader has been pressed");
+					break;
+
+				case 2:
+					window.close();
+					break;
+				}
+			}
+			break;
+
+		}
 	}
-	this->updatePlayer();
-	this->updateCollision();
-	this->updateWorld();
-	this->updateCoin();
-	this->updateSpike();
-	this->updateHpBar();
-	this->updateHeartItem();
-	this->updateShield();
+
+	if (IsOpen == true)
+	{
+
+		this->updatePlayer();
+		this->updateCollision();
+		this->updateWorld();
+		this->updateCoin();
+		this->updateSpike();
+		this->updateHpBar();
+		this->updateHeartItem();
+		this->updateShield();
+	}
 }
 
 void Game::renderSpike()
@@ -361,24 +414,35 @@ void Game::renderWorld()
 void Game::render()
 {
 	this->window.clear();
-	//Draw World
-	this->renderWorld();
 
-	//Render game
-	this->rederPlayer();
+	if (IsOpen == true)
+	{
 
-	//Render Coin
-	this->renderCoin();
+		//Draw World
+		this->renderMenu();
+		this->renderWorld();
 
-	//Render Spike
-	this->renderSpike();
+		//Render game
+		this->rederPlayer();
 
-	//Render HpBar
-	this->renderGUI();
+		//Render Coin
+		this->renderCoin();
 
-	//Render Item
-	this->renderHeartItem();
-	this->renderShield();
+		//Render Spike
+		this->renderSpike();
+
+		//Render HpBar
+		this->renderGUI();
+
+		//Render Item
+		this->renderHeartItem();
+		this->renderShield();
+
+	}
+	else
+	{
+		this->renderMenu();
+	}
 
 	this->window.display();
 }
@@ -387,5 +451,10 @@ const sf::RenderWindow& Game::getWindow() const
 {
 	// TODO: insert return statement here
 	return this->window;
+}
+
+void Game::renderMenu()
+{
+	this->menu->render(window);
 }
 

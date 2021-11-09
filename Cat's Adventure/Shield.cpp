@@ -76,5 +76,5 @@ void Shield::update()
 void Shield::render(sf::RenderTarget& target)
 {
 	target.draw(this->shield);
-	target.draw(this->shieldHitbox);
+	//target.draw(this->shieldHitbox);
 }

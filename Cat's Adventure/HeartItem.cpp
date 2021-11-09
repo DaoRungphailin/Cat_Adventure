@@ -76,5 +76,5 @@ void HeartItem::update()
 void HeartItem::render(sf::RenderTarget& target)
 {
 	target.draw(this->heart);
-	target.draw(this->heartHitbox);
+	//target.draw(this->heartHitbox);
 }
