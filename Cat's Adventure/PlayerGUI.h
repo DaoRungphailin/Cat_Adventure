@@ -17,9 +17,14 @@ private:
 	sf::RectangleShape hpBarBack;
 	sf::RectangleShape hpBarInner;
 
+	//Game Over
+	std::string gameOverString;
+	sf::Text gameOverText;
+
 	void initFont();
 	void initHpBar();
 	void initScoreBar();
+	void initGameOver();
 
 public:
 	PlayerGUI();
@@ -37,6 +42,7 @@ public:
 
 	void renderScore(sf::RenderTarget& target);
 	void renderHpBar(sf::RenderTarget& target);
+	void renderGameOver(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
 };
 

@@ -61,6 +61,9 @@ private:
 	PlayerGUI* playerGUI;
 	PlayerGUI* hpBar;
 
+	//Game Over
+	PlayerGUI* gameOver;
+
 	//World
 	sf::Texture worldBackgroundTex;
 	sf::Sprite worldBackground;
@@ -68,13 +71,15 @@ private:
 
 	//Main Menu
 	Menu* menu;
-	bool IsOpen = false;
+	bool IsOpen = true;
 
 public:
 
 	//Functions
 	Game();
 	virtual ~Game();
+
+	void run();
 
 	//Functions
 	void updateShield();
@@ -85,6 +90,7 @@ public:
 	void updatePlayer();
 	void updateCollision();
 	void updateWorld();
+	void updatePollEvent();
 	void update();
 
 	void renderShield();
@@ -95,6 +101,7 @@ public:
 	void rederPlayer();
 	void renderWorld();
 	void renderMenu();
+	void renderGameOver();
 	void render();
 	const sf::RenderWindow& getWindow() const;
 };

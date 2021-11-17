@@ -119,7 +119,7 @@ void Game::updateShield()
 		}
 
 		//Left of screen
-		if (this->shield[i]->getPosition().x < 0)
+		if (this->shield[i]->getPosition().x + this->shield[i]->getGlobalbounds().width < 0)
 		{
 			this->shield.erase(this->shield.begin() + i);
 			countShield--;
@@ -167,7 +167,7 @@ void Game::updateHeartItem()
 		}
 
 		//Left of screen
-		if (this->heartItem[i]->getPosition().x < 0)
+		if (this->heartItem[i]->getPosition().x + this->heartItem[i]->getGlobalbounds().width < 0)
 		{
 			this->heartItem.erase(this->heartItem.begin() + i);
 			countHeart--;
@@ -202,7 +202,7 @@ void Game::updateSpike()
 		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
 			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f && this->playerGUI->hp >= 10
 			&& this->delayAura.getElapsedTime().asSeconds() >= 5.f
-			&& IsStart == true)
+			/* && IsStart == true */)
 		{
 				this->playerGUI->setHp(-10);
 				printf("hp = %d\n",this->playerGUI->hp);
@@ -210,7 +210,7 @@ void Game::updateSpike()
 		}
 
 		//Left of screen
-		if (this->spike[i]->getPosition().x < 0)
+		if (this->spike[i]->getPosition().x + this->spike[i]->getGlobalbounds().width < 0)
 		{
 			this->spike.erase(this->spike.begin() + i);
 			countSpike--;
@@ -254,7 +254,7 @@ void Game::updateCoin()
 		}
 
 	//Left of Screen
-		if (this->coin[i]->getPosition().x < 0)
+		if (this->coin[i]->getPosition().x + this->coin[i]->getGlobalbounds().width  < 0)
 		{
 			this->coin.erase(this->coin.begin() + i);
 			countCoin--;
@@ -274,10 +274,10 @@ void Game::updateCollision()
 	if (this->player->getPosition().y + this->player->getGlobalBounds().height > this->window.getSize().y)
 	{
 		this->player->resetVelocityY();
-		this->player->setPosition(this->player->getPosition().x, this->window.getSize().y - this->player->getGlobalBounds().height-110);
 		this->player->jumping = false;
 		this->player->jumpingUp = false;
 		this->player->gravityBool = false;
+		this->player->setPosition(this->player->getPosition().x, this->window.getSize().y - this->player->getGlobalBounds().height - 110);
 	}
 }
 
@@ -287,15 +287,39 @@ void Game::updateWorld()
 	this->backgroundX -= 0.5;
 }
 
-void Game::update()
+void Game::run()
 {
-	//Polling window events
+	while (this->window.isOpen())
+	{
+		this->updatePollEvent();
+
+		if (this->playerGUI->hp > 0)
+			this->update();
+
+		this->render();
+	}
+}
+
+void Game::updatePollEvent()
+{
 	while (this->window.pollEvent(this->ev))
 	{
 		if (this->ev.type == sf::Event::Closed)
 			this->window.close();
 		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
 			this->window.close();
+	}
+}
+
+void Game::update()
+{
+	//Polling window events
+	while (this->window.pollEvent(this->ev))
+	{
+		/*if (this->ev.type == sf::Event::Closed)
+			this->window.close();
+		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
+			this->window.close();*/
 
 		if (
 			this->ev.type == sf::Event::KeyReleased &&
@@ -438,6 +462,10 @@ void Game::render()
 		this->renderHeartItem();
 		this->renderShield();
 
+		//Game over screen
+		if (this->playerGUI->hp <= 0)
+			this->renderGameOver();
+
 	}
 	else
 	{
@@ -453,8 +481,14 @@ const sf::RenderWindow& Game::getWindow() const
 	return this->window;
 }
 
+
 void Game::renderMenu()
 {
 	this->menu->render(window);
+}
+
+void Game::renderGameOver()
+{
+	this->gameOver->render(window);
 }
 
