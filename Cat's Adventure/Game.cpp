@@ -64,6 +64,12 @@ Game::~Game()
 		delete i;
 	}
 
+	//Bomb
+	for (auto* i : this->bomb)
+	{
+		delete i;
+	}
+
 	//Boost Hp
 	for (auto* i : this->heartItem)
 	{
@@ -218,6 +224,54 @@ void Game::updateSpike()
 		}
 	}
 
+}
+
+void Game::updateBomb()
+{
+	//Count Bomb
+	if (this->randomBomb.getElapsedTime().asSeconds() >= 0.5f)
+	{
+		if (countBomb < 1)
+		{
+			bombX = 60 + rand() % 1500;
+			bombY = 100 + rand() % 500;
+			this->bomb.push_back(new Bomb(bombX, bombY));
+			this->randomBomb.restart();
+			countBomb++;
+		}
+	}
+
+	//Update
+	for (int i = 0; i < this->bomb.size(); ++i)
+	{
+		this->bomb[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < bomb.size(); i++)
+	{
+		if (this->player->getGlobalBoundsHitbox().intersects(this->bomb[i]->getGlobalbounds())
+			&& this->delayBomb.getElapsedTime().asSeconds() > 0.5f)
+		{
+			//Decrease Hp
+			this->playerGUI->setHp(-10);
+
+			//Delete heart
+			this->bomb.erase(this->bomb.begin() + i);
+			countBomb--;
+			break;
+
+			this->delayBomb.restart();
+		}
+
+		//Left of screen
+		if (this->bomb[i]->getPosition().x + this->heartItem[i]->getGlobalbounds().width < 0)
+		{
+			this->bomb.erase(this->bomb.begin() + i);	
+			countBomb--;
+			break;
+		}
+	}
 }
 
 void Game::updateCoin()
@@ -375,7 +429,6 @@ void Game::update()
 
 	if (IsOpen == true)
 	{
-
 		this->updatePlayer();
 		this->updateCollision();
 		this->updateWorld();
@@ -384,6 +437,7 @@ void Game::update()
 		this->updateHpBar();
 		this->updateHeartItem();
 		this->updateShield();
+		this->updateBomb();
 	}
 }
 
@@ -424,6 +478,14 @@ void Game::renderCoin()
 	}
 }
 
+void Game::renderBomb()
+{
+	for (auto* i : this->bomb)
+	{
+		i->render(this->window);
+	}
+}
+
 void Game::rederPlayer()
 {
 	this->player->render(this->window);//render players and send to window
@@ -454,6 +516,9 @@ void Game::render()
 
 		//Render Spike
 		this->renderSpike();
+
+		//Render Bomb
+		this->renderBomb();
 
 		//Render HpBar
 		this->renderGUI();
@@ -487,8 +552,10 @@ void Game::renderMenu()
 	this->menu->render(window);
 }
 
+
 void Game::renderGameOver()
 {
 	this->gameOver->render(window);
 }
+
 

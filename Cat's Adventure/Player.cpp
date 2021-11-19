@@ -185,7 +185,7 @@ void Player::updateMovement()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))//Right
 	{
-		if (this->getPosition().x < 1000.f - this->sprite.getGlobalBounds().width + 30.f)
+		if (this->getPosition().x < 1700.f - this->sprite.getGlobalBounds().width + 30.f)
 		{
 			this->sprite.move(3.f, 0.f);
 			this->animState = PLAYER_ANIMATION_STATES::MOVING_RIGHT;

@@ -1,16 +1,15 @@
 #pragma once
-class Shield
+#include "stdafx.h"
+
+class Bomb
 {
 private:
-	sf::Sprite shield;
-	sf::Texture shieldTex;
-	float shieldX;
-
-	sf::Sprite aura;
-	sf::Texture auraTex;
+	sf::Sprite bomb;
+	sf::Texture bombTex;
+	float bombX;
 
 	//Hitbox
-	sf::RectangleShape shieldHitbox;
+	sf::RectangleShape bombHitbox;
 
 	void initHitbox();
 	void initSprite();
@@ -20,9 +19,9 @@ private:
 	void updateMovement();
 
 public:
-	virtual ~Shield();
+	virtual ~Bomb();
 
-	Shield(float x, float y);
+	Bomb(float x, float y);
 
 	const sf::Vector2f getPosition();
 	const sf::FloatRect getGlobalbounds() const;
@@ -31,11 +30,7 @@ public:
 	//Hitbox
 	const sf::FloatRect getGlobalBoundsHitbox() const;
 
-	void updateAura();
 	void update();
-
-	void renderAura(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
-
 };
 

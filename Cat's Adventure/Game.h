@@ -6,6 +6,7 @@
 #include "PlayerGUI.h"
 #include "HeartItem.h"
 #include "Shield.h"
+#include "Bomb.h"
 #include "Menu.h"
 
 class Game
@@ -24,7 +25,7 @@ private:
 	void initGUI();
 	void initMenu();
 
-	//Item
+	//ITEM
 	/*Boost Hp*/
 	std::vector<HeartItem*> heartItem;
 	sf::Clock randomHeart;
@@ -51,11 +52,20 @@ private:
 	float coinY = 0;
 	int countCoin = 0;
 
+	//ENEMIES
 	//Spike
 	std::vector<Spike*> spike;
 	sf::Clock delayCrash;
 	int countSpike = 0;
 	float spikeX = 0;
+
+	//Bomb
+	std::vector<Bomb*> bomb;
+	sf::Clock randomBomb;
+	sf::Clock delayBomb;
+	float bombX = 0;
+	float bombY = 0;
+	int countBomb = 0;
 
 	//GUI
 	PlayerGUI* playerGUI;
@@ -86,6 +96,7 @@ public:
 	void updateHeartItem();
 	void updateHpBar();
 	void updateSpike();
+	void updateBomb();
 	void updateCoin();
 	void updatePlayer();
 	void updateCollision();
@@ -97,6 +108,7 @@ public:
 	void renderHeartItem();
 	void renderGUI();
 	void renderSpike();
+	void renderBomb();
 	void renderCoin();
 	void rederPlayer();
 	void renderWorld();

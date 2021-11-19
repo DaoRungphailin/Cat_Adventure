@@ -12,6 +12,7 @@ void Shield::initHitbox()
 void Shield::initSprite()
 {
 	this->shield.setTexture(this->shieldTex);
+	this->aura.setTexture(this->auraTex);
 }
 
 void Shield::initTexture()
@@ -19,6 +20,11 @@ void Shield::initTexture()
 	if (!this->shieldTex.loadFromFile("Textures/shield.png"))
 	{
 		std::cout << "ERROR::PLAYER::Could not load the boostHp sheet!" << "\n";
+	}
+
+	if (!this->auraTex.loadFromFile("Textures/auraShield.PNG"))
+	{
+		std::cout << "ERROR::PLAYER::Could not load the Aura sheet!" << "\n";
 	}
 }
 
@@ -73,8 +79,18 @@ void Shield::update()
 	this->updateHitbox();
 }
 
+void Shield::updateAura()
+{
+}
+
+void Shield::renderAura(sf::RenderTarget& target)
+{
+	target.draw(this->aura);
+}
+
 void Shield::render(sf::RenderTarget& target)
 {
 	target.draw(this->shield);
 	//target.draw(this->shieldHitbox);
 }
+
