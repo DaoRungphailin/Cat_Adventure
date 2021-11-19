@@ -138,11 +138,12 @@ void Game::updateShield()
 			countShield--;
 			break;
 		}
-	}
 
-	if (IsAura == true)
-	{
-
+		//Draw Aura 
+		if (IsAura == true)
+		{
+			this->shield[i]->setPositionAura(this->player->getPosition().x - 40.f, this->player->getPosition().y + 25.f);
+		}
 	}
 }
 
@@ -493,9 +494,6 @@ void Game::render()
 		this->renderMenu();
 		this->renderWorld();
 
-		//Render game
-		this->rederPlayer();
-
 		//Render Coin
 		this->renderCoin();
 
@@ -511,6 +509,9 @@ void Game::render()
 		//Render Item
 		this->renderHeartItem();
 		this->renderShield();
+		
+		//Render game
+		this->rederPlayer();
 
 		//Game over screen
 		if (this->playerGUI->hp <= 0)

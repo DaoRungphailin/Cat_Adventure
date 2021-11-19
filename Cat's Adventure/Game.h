@@ -83,7 +83,7 @@ private:
 
 	//Main Menu
 	Menu* menu;
-	bool IsOpen = false;
+	bool IsOpen = true;
 
 public:
 

@@ -9,6 +9,7 @@ private:
 	//Game Over
 	std::string gameOverString;
 	sf::Text gameOverText;
+	sf::RectangleShape gameOverBox;
 
 	void initFont();
 	void initGameOver();
