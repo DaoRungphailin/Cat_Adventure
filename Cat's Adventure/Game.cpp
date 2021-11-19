@@ -37,6 +37,11 @@ void Game::initMenu()
 	this->menu = new Menu(window.getSize().x, window.getSize().y);
 }
 
+void Game::initGameOver()
+{
+	this->gameOver = new GameOver();
+}
+
 Game::Game()
 {
 	this->initWindow();
@@ -45,6 +50,7 @@ Game::Game()
 	this->initMenu();
 	this->initGUI();
 	this->initHpBar();
+	this->initGameOver();
 }
 
 Game::~Game()
@@ -122,6 +128,7 @@ void Game::updateShield()
 			this->delayShield.restart();
 			this->delayAura.restart();
 			break;
+
 		}
 
 		//Left of screen
@@ -132,19 +139,23 @@ void Game::updateShield()
 			break;
 		}
 	}
+
+	if (IsAura == true)
+	{
+
+	}
 }
 
 void Game::updateHeartItem()
 {
 	//Count Heart
-	if (this->randomHeart.getElapsedTime().asSeconds() >= 0.5f)
+	if (this->playerGUI->score % 100 == 0)
 	{
 		if (countHeart < 1)
 		{
 			heartX = 60 + rand() % 1500;
 			heartY = 100 + rand() % 500;
 			this->heartItem.push_back(new HeartItem(heartX, heartY));
-			this->randomHeart.restart();
 			countHeart++;
 		}
 	}
@@ -211,7 +222,6 @@ void Game::updateSpike()
 			/* && IsStart == true */)
 		{
 				this->playerGUI->setHp(-10);
-				printf("hp = %d\n",this->playerGUI->hp);
 				this->delayCrash.restart();
 		}
 
@@ -229,7 +239,7 @@ void Game::updateSpike()
 void Game::updateBomb()
 {
 	//Count Bomb
-	if (this->randomBomb.getElapsedTime().asSeconds() >= 0.5f)
+	if (this->playerGUI->score >= 200)
 	{
 		if (countBomb < 1)
 		{
@@ -265,7 +275,7 @@ void Game::updateBomb()
 		}
 
 		//Left of screen
-		if (this->bomb[i]->getPosition().x + this->heartItem[i]->getGlobalbounds().width < 0)
+		if (this->bomb[i]->getPosition().x + this->bomb[i]->getGlobalbounds().width < 0)
 		{
 			this->bomb.erase(this->bomb.begin() + i);	
 			countBomb--;
@@ -301,10 +311,9 @@ void Game::updateCoin()
 		if (this->player->getGlobalBoundsHitbox().intersects(this->coin[i]->getGlobalBoundsHitbox()))
 		{
 			this->coin.erase(this->coin.begin() + i);
-			this->playerGUI->setScore(1);
+			this->playerGUI->setScore(10);
 			countCoin--;
 			break;
-			//printf("score = %d\n", this->playerGUI->score);
 		}
 
 	//Left of Screen
@@ -325,13 +334,13 @@ void Game::updatePlayer()
 void Game::updateCollision()
 {
 	//Collision bottom of screen
-	if (this->player->getPosition().y + this->player->getGlobalBounds().height > this->window.getSize().y)
+	if (this->player->getPosition().y + this->player->getGlobalBounds().height - 110.f > this->window.getSize().y)
 	{
 		this->player->resetVelocityY();
 		this->player->jumping = false;
 		this->player->jumpingUp = false;
 		this->player->gravityBool = false;
-		this->player->setPosition(this->player->getPosition().x, this->window.getSize().y - this->player->getGlobalBounds().height - 110);
+		this->player->setPosition(this->player->getPosition().x, this->window.getSize().y - this->player->getGlobalBounds().height - 110.f);
 	}
 }
 
@@ -341,39 +350,15 @@ void Game::updateWorld()
 	this->backgroundX -= 0.5;
 }
 
-void Game::run()
+void Game::update()
 {
-	while (this->window.isOpen())
-	{
-		this->updatePollEvent();
-
-		if (this->playerGUI->hp > 0)
-			this->update();
-
-		this->render();
-	}
-}
-
-void Game::updatePollEvent()
-{
+	//Polling window events
 	while (this->window.pollEvent(this->ev))
 	{
 		if (this->ev.type == sf::Event::Closed)
 			this->window.close();
 		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
 			this->window.close();
-	}
-}
-
-void Game::update()
-{
-	//Polling window events
-	while (this->window.pollEvent(this->ev))
-	{
-		/*if (this->ev.type == sf::Event::Closed)
-			this->window.close();
-		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
-			this->window.close();*/
 
 		if (
 			this->ev.type == sf::Event::KeyReleased &&
@@ -407,14 +392,14 @@ void Game::update()
 				switch (menu->getPressedItem())
 				{
 				case 0:
-					printf("Player has been pressed");
+					//printf("Player has been pressed");
 					//go to state
 					IsOpen = true;
 					break;
 
 				case 1:
 					//go to state
-					printf("Leader has been pressed");
+					//printf("Leader has been pressed");
 					break;
 
 				case 2:
@@ -427,7 +412,7 @@ void Game::update()
 		}
 	}
 
-	if (IsOpen == true)
+	if (IsOpen == true && playerGUI->hp > 0)
 	{
 		this->updatePlayer();
 		this->updateCollision();

@@ -36,22 +36,11 @@ void PlayerGUI::initScoreBar()
 	this->scoreText.setPosition(1500.f, 10.f);
 }
 
-void PlayerGUI::initGameOver()
-{
-	this->gameOverText.setFont(this->font);
-	this->gameOverText.setFillColor(sf::Color::Red); //(255, 235, 59, 500)
-	this->gameOverText.setCharacterSize(60.f);
-	this->gameOverText.setPosition(1500.f, 10.f);
-	this->gameOverText.setString("Game Over!");
-	this->gameOverText.setPosition(1700.f / 2.f - this->gameOverText.getGlobalBounds().width / 2.f, 760.f / 2.f - this->gameOverText.getGlobalBounds().height / 2.f);
-}
-
 PlayerGUI::PlayerGUI()
 {
 	this->initFont();
 	this->initHpBar();
 	this->initScoreBar();
-	this->initGameOver();
 
 	this->hp;
 	this->score;
@@ -105,14 +94,9 @@ void PlayerGUI::renderHpBar(sf::RenderTarget & target)
 	target.draw(this->hpBarText);
 }
 
-void PlayerGUI::renderGameOver(sf::RenderTarget& target)
-{
-	target.draw(this->gameOverText);
-}
 
 void PlayerGUI::render(sf::RenderTarget& target)
 {
 	this->renderHpBar(target);
 	this->renderScore(target);
-	this->renderGameOver(target);
 }

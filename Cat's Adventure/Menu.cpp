@@ -60,7 +60,6 @@ void Menu::moveUp()
 {
 	if (selectedItem - 1 >= 0)
 	{
-
 		menu[selectedItem].setFillColor(sf::Color::White);
 		selectedItem--;
 		menu[selectedItem].setFillColor(sf::Color::Red);

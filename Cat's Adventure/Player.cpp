@@ -203,7 +203,6 @@ void Player::updateMovement()
 				this->velocity.y = -50.f;
 				this->timeJumping.restart();
 				jumpTimes++;
-				//printf("%d\n", jumpTimes);
 			}
 		}
 		//this->animState = PLAYER_ANIMATION_STATES::JUMPING;

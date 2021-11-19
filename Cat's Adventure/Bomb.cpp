@@ -76,5 +76,5 @@ void Bomb::update()
 void Bomb::render(sf::RenderTarget& target)
 {
 	target.draw(this->bomb);
-	target.draw(this->bombHitbox);
+	//target.draw(this->bombHitbox);
 }

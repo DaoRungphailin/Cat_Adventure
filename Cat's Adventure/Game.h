@@ -8,6 +8,7 @@
 #include "Shield.h"
 #include "Bomb.h"
 #include "Menu.h"
+#include "GameOver.h"
 
 class Game
 {
@@ -24,6 +25,7 @@ private:
 	void initHpBar();
 	void initGUI();
 	void initMenu();
+	void initGameOver();
 
 	//ITEM
 	/*Boost Hp*/
@@ -72,7 +74,7 @@ private:
 	PlayerGUI* hpBar;
 
 	//Game Over
-	PlayerGUI* gameOver;
+	GameOver* gameOver;
 
 	//World
 	sf::Texture worldBackgroundTex;
@@ -81,7 +83,7 @@ private:
 
 	//Main Menu
 	Menu* menu;
-	bool IsOpen = true;
+	bool IsOpen = false;
 
 public:
 
