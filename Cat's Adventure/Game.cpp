@@ -130,6 +130,11 @@ void Game::updateShield()
 			break;
 
 		}
+		/*else
+		{
+			IsAura = false;
+			IsStart = false;
+		}*/
 
 		//Left of screen
 		if (this->shield[i]->getPosition().x + this->shield[i]->getGlobalbounds().width < 0)
@@ -144,6 +149,10 @@ void Game::updateShield()
 		{
 			this->shield[i]->setPositionAura(this->player->getPosition().x - 40.f, this->player->getPosition().y + 25.f);
 		}
+
+		if (delayAura.getElapsedTime().asSeconds() >= 5.f)
+			IsAura = false;
+
 	}
 }
 
@@ -440,6 +449,9 @@ void Game::renderShield()
 	for (auto* i : this->shield)
 	{
 		i->render(this->window);
+
+		if (IsAura == true)
+			i->renderAura(this->window);
 	}
 }
 

@@ -42,6 +42,7 @@ public:
 	void updateAura();
 	void update();
 
+	void renderAura(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
 
 };

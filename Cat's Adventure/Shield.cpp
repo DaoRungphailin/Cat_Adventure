@@ -74,6 +74,11 @@ void Shield::setPosition(float x, float y)
 	this->shield.setPosition(x, y);
 }
 
+void Shield::renderAura(sf::RenderTarget& target)
+{
+	target.draw(this->aura);
+}
+
 void Shield::setPositionAura(float x, float y)
 {
 	this->aura.setPosition(x, y);
@@ -99,7 +104,7 @@ void Shield::updateAura()
 void Shield::render(sf::RenderTarget& target)
 {
 	target.draw(this->shield);
-	target.draw(this->aura);
+	//target.draw(this->aura);
 	//target.draw(this->shieldHitbox);
 }
 
