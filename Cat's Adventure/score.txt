@@ -2,4 +2,4 @@ aaa 800
 ddd 600
 fff 500
 deja 420
-dd 340
+kkk 370

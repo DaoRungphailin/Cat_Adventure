@@ -21,6 +21,11 @@ private:
 	size_t getscore;
 	std::string getName;
 
+	//Background
+	sf::Sprite scoreBg;
+	sf::Texture scoreBgTex;
+
+	void initScoreBackground();
 
 public:
 
@@ -31,6 +36,8 @@ public:
 	std::string Pname;
 	int scoreplayer;
 	void setscoretext();
+
+	void renderScoreBackground(sf::RenderWindow& window);
 	void Drawscore(sf::RenderWindow& window);
 
 };

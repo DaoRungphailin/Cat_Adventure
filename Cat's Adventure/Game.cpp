@@ -44,12 +44,12 @@ void Game::initGameOver()
 
 void Game::initUsername()
 {
-	if (!this->nameBackgroundTex.loadFromFile("Backgrounds/nameBg.jpg"))
+	if (!this->nameBackgroundTex.loadFromFile("Backgrounds/bgg.jpg"))
 	{
 		std::cout << "ERORR Can't load background" << "\n";
 	}
 	this->nameBackground.setTexture(this->nameBackgroundTex);
-	this->nameBackground.setScale(3.1f, 2.5f);
+	//this->nameBackground.setScale(3.f, 3.f);
 }
 
 Game::Game()
@@ -541,10 +541,10 @@ void Game::update()
 		player_name = "";
 		sf::Text p_name;
 		sf::Font font;
-		font.loadFromFile("Fonts/Meows-VGWjy.ttf");
+		font.loadFromFile("Fonts/upheavtt.ttf");
 		sf::Text enter("Player name", font, 80);
 		enter.setFillColor(sf::Color::Black);
-		enter.setPosition(650, 150);
+		enter.setPosition(600, 200);
 		p_name.setFont(font);
 		for (int i = 0; i < username.size(); i++)
 		{
@@ -681,7 +681,10 @@ void Game::update()
 				}
 
 				if (scoreCheck == true)
+				{
+					this->scoreBoard.renderScoreBackground(window);
 					this->renderHighScore();
+				}
 			}
 		}
 

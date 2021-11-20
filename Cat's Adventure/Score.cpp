@@ -3,20 +3,31 @@
 #include "score.h"
 
 using namespace std;
+void Score::initScoreBackground()
+{
+	if (!this->scoreBgTex.loadFromFile("Backgrounds/bg.png"))
+	{
+		std::cout << "ERORR Can't load background" << "\n";
+	}
+	this->scoreBg.setTexture(this->scoreBgTex);
+	this->scoreBg.setScale(1.35f, 1.35f);
+}
+
 Score::Score()
 {
+	this->initScoreBackground();
 	font.loadFromFile("Fonts/baby blocks.ttf");
 	font2.loadFromFile("Fonts/rainyhearts.ttf");
 	sf::Text ttext("SCOREBOARD", font, 80);
 	main = ttext;
-	main.setFillColor(sf::Color::White);
+	main.setFillColor(sf::Color::Black);
 	main.setOrigin(sf::Vector2f(main.getGlobalBounds().width / 2, 0));
-	main.setPosition(sf::Vector2f(1700/2 - (this->main.getGlobalBounds().width / 2), 100));
+	main.setPosition(sf::Vector2f(900, 50));
 	for (int i = 0; i < 5; i++)
 	{
-		scoretext[i].setCharacterSize(40);
-		scoretext[i].setFillColor(sf::Color::White);
-		scoretext[i].setPosition(540, 200 + (i * 80));
+		scoretext[i].setCharacterSize(65);
+		scoretext[i].setFillColor(sf::Color::Black);
+		scoretext[i].setPosition(900, 200 + (i * 80));
 		scoretext[i].setFont(font2);
 	}
 }
@@ -62,6 +73,11 @@ void Score::wFile()
 
 void Score::setscoretext()
 {
+}
+
+void Score::renderScoreBackground(sf::RenderWindow& window)
+{
+	window.draw(this->scoreBg);
 }
 
 void Score::Drawscore(sf::RenderWindow& window)
