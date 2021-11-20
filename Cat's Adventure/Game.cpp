@@ -2,6 +2,12 @@
 #include "Game.h"
 
 
+void Game::initSound()
+{
+	buffer.loadFromFile("Sound/03 - Super Mario Bros 2 Main Theme.wav");
+	sound.setBuffer(buffer);
+}
+
 void Game::initWindow()
 {
 	this->window.create(sf::VideoMode(1700.f, 760.f), "Cat's Adventure", sf::Style::Close | sf::Style::Titlebar, sf::ContextSettings());
@@ -58,6 +64,7 @@ Game::Game()
 	end = 0;
 
 	this->initWindow();
+	this->initSound();
 	this->initUsername();
 	this->initPlayer();
 	this->initWorld();
@@ -65,8 +72,6 @@ Game::Game()
 	this->initGUI();
 	this->initHpBar();
 	this->initGameOver();
-
-	//this->scoreBoard.wFile();
 }
 
 Game::~Game()
@@ -462,6 +467,8 @@ void Game::update()
 
 		if (IsOpen == true && playerGUI->hp > 0)
 		{
+			sound.play();
+			sound.setVolume(1);
 			this->updatePlayer();
 			this->updateCollision();
 			this->updateWorld();

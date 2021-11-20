@@ -20,6 +20,7 @@ private:
 	Player* player;
 
 	//Private function
+	void initSound();
 	void initWindow();
 	void initPlayer();
 	void initWorld();
@@ -101,13 +102,16 @@ private:
 	//Username
 	sf::Texture nameBackgroundTex;
 	sf::Sprite nameBackground;
-
 	sf::Texture nameboardTex;
 	sf::Sprite nameboardSprite;
 	std::string player_name = "";
 	std::vector<char> username;
 	bool namestate = false;
 	sf::RectangleShape textBox;
+
+	//Sound
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 
 public:
 
