@@ -103,9 +103,6 @@ private:
 	std::string player_name = "";
 	std::vector<char> username;
 	bool namestate = false;
-	sf::Text p_name;
-	sf::Font font;
-	std::stringstream ss;
 
 public:
 
@@ -116,6 +113,8 @@ public:
 	void run();
 
 	//Functions
+	void getName(std::string name);
+
 	void updateHighScore();
 	void updateShield();
 	void updateHeartItem();

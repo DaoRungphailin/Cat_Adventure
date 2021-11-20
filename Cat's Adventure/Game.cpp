@@ -387,8 +387,7 @@ void Game::update()
 		else if (this->ev.type == sf::Event::KeyPressed && this->ev.key.code == sf::Keyboard::Escape)//if Keypressed & key set to Escape
 			this->window.close();
 
-		if (
-			this->ev.type == sf::Event::KeyReleased &&
+		if (this->ev.type == sf::Event::KeyReleased &&
 			(
 				this->ev.key.code == sf::Keyboard::A ||
 				this->ev.key.code == sf::Keyboard::D ||
@@ -427,8 +426,8 @@ void Game::update()
 
 					case 1:
 						//go to state LeaderBoard
-						printf("Leader has been pressed\n");
-						scoreCheck = true;
+						//printf("Leader has been pressed\n");
+						//scoreCheck = true;
 						break;
 
 					case 2:
@@ -461,6 +460,7 @@ void Game::update()
 			this->renderHighScore();
 		}
 	}
+}
 
 	void Game::renderSpike()
 	{
@@ -516,10 +516,19 @@ void Game::update()
 		this->scoreBoard.Drawscore(this->window);
 	}
 
+	void Game::getName(std::string name)
+	{
+
+		this->scoreBoard.Pname = name;
+	}
+
 	void Game::renderUsername()
 	{
+		std::stringstream ss;
 		player_name = "";
-		font.loadFromFile("fontMeows-VGWjy.ttf");
+		sf::Text p_name;
+		sf::Font font;
+		font.loadFromFile("Fonts/Meows-VGWjy.ttf");
 		sf::Text enter("Player name", font, 80);
 		enter.setFillColor(sf::Color::White);
 		enter.setPosition(550, 150);
@@ -543,8 +552,8 @@ void Game::update()
 		}
 		p_name.setPosition(820 - (p_name.getGlobalBounds().width / 2), 330);
 
-		this->window.draw(p_name);
-		this->window.draw(enter);
+		window.draw(p_name);
+		window.draw(enter);
 	}
 
 	void Game::rederPlayer()
@@ -561,6 +570,47 @@ void Game::update()
 	void Game::render()
 	{
 		this->window.clear();
+
+		timeUS = timeText.getElapsedTime().asMilliseconds();
+
+		if (namestate) {
+
+
+			if (ev.type == sf::Event::TextEntered && timeUS > 500) {
+
+				timeText.restart();
+				username.push_back(ev.text.unicode);
+			}
+			if (!username.empty() && username.back() == 8)
+			{
+				username.pop_back();
+				if (!username.empty())
+					username.pop_back();
+			}
+			if (username.size() != 1 && !username.empty() && username.back() == 13)
+			{
+				username.pop_back();
+			}
+			if (!username.empty() && !((username.back() >= 'A' && username.back() <= 'Z') || (username.back() >= 'a' && username.back() <= 'z') || (username.back() >= '0' && username.back() <= '9') || username.back() == '_'))
+			{
+				username.pop_back();
+			}
+			if (username.size() > 15)
+			{
+				username.pop_back();
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && username.size() != 0)
+			{
+
+				this->getName(player_name);
+				//namestate = true;
+				namestate = false;
+				//printf("Enter");
+				IsOpen = true;
+				std::cout << player_name;
+			}
+
+		}
 
 		if (IsOpen == true)
 		{
@@ -589,12 +639,28 @@ void Game::update()
 
 			//Game over screen
 			if (this->playerGUI->hp <= 0)
+			{
+				this->scoreBoard.scoreplayer = playerGUI->score;
+
+				if (end < 1)
+				{
+
+					this->scoreBoard.wFile();
+					end++;
+				}
+				this->renderHighScore();
 				this->renderGameOver();
+			}
 
 		}
 		else
 		{
 			this->renderMenu();
+
+			if (namestate)
+			{
+				this->renderUsername();
+			}
 		}
 
 		this->window.display();
