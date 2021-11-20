@@ -8,6 +8,7 @@ class Score
 
 private:
 	sf::Font font;
+	sf::Font font2;
 	sf::Text main, scoretext[5];
 	FILE* fp;
 	sf::Text top[5];

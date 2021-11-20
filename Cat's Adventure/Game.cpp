@@ -44,6 +44,12 @@ void Game::initGameOver()
 
 void Game::initUsername()
 {
+	if (!this->nameBackgroundTex.loadFromFile("Backgrounds/nameBg.jpg"))
+	{
+		std::cout << "ERORR Can't load background" << "\n";
+	}
+	this->nameBackground.setTexture(this->nameBackgroundTex);
+	this->nameBackground.setScale(3.1f, 2.5f);
 }
 
 Game::Game()
@@ -52,6 +58,7 @@ Game::Game()
 	end = 0;
 
 	this->initWindow();
+	this->initUsername();
 	this->initPlayer();
 	this->initWorld();
 	this->initMenu();
@@ -404,7 +411,6 @@ void Game::update()
 		{
 			menuCheck = true;
 			IsOpen = false;
-			printf("space press\n");
 		}
 
 		//Set Menu
@@ -537,7 +543,7 @@ void Game::update()
 		sf::Font font;
 		font.loadFromFile("Fonts/Meows-VGWjy.ttf");
 		sf::Text enter("Player name", font, 80);
-		enter.setFillColor(sf::Color::White);
+		enter.setFillColor(sf::Color::Black);
 		enter.setPosition(650, 150);
 		p_name.setFont(font);
 		for (int i = 0; i < username.size(); i++)
@@ -547,7 +553,7 @@ void Game::update()
 		p_name.setCharacterSize(55);
 		if (username.empty())
 		{
-			p_name.setFillColor(sf::Color::White);
+			p_name.setFillColor(sf::Color::Black);
 			p_name.setString("_");
 		}
 		else
@@ -555,12 +561,17 @@ void Game::update()
 			ss << player_name << "_";
 			std::string str = ss.str();
 			p_name.setString(str);
-			p_name.setFillColor(sf::Color::White);
+			p_name.setFillColor(sf::Color::Black);
 		}
 		p_name.setPosition(820 - (p_name.getGlobalBounds().width / 2), 330);
 
 		window.draw(p_name);
 		window.draw(enter);
+	}
+
+	void Game::renderNameBg()
+	{
+		this->window.draw(this->nameBackground);
 	}
 
 	void Game::rederPlayer()
@@ -664,7 +675,10 @@ void Game::update()
 			else
 			{
 				if (namestate)
+				{
+					this->renderNameBg();
 					this->renderUsername();
+				}
 
 				if (scoreCheck == true)
 					this->renderHighScore();

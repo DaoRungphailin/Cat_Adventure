@@ -5,18 +5,19 @@
 using namespace std;
 Score::Score()
 {
-	font.loadFromFile("Fonts/Meows-VGWjy.ttf");
-	sf::Text ttext("ScoreBoard", font, 80);
+	font.loadFromFile("Fonts/baby blocks.ttf");
+	font2.loadFromFile("Fonts/rainyhearts.ttf");
+	sf::Text ttext("SCOREBOARD", font, 80);
 	main = ttext;
 	main.setFillColor(sf::Color::White);
 	main.setOrigin(sf::Vector2f(main.getGlobalBounds().width / 2, 0));
-	main.setPosition(sf::Vector2f(540, 50));
+	main.setPosition(sf::Vector2f(1700/2 - (this->main.getGlobalBounds().width / 2), 100));
 	for (int i = 0; i < 5; i++)
 	{
 		scoretext[i].setCharacterSize(40);
 		scoretext[i].setFillColor(sf::Color::White);
 		scoretext[i].setPosition(540, 200 + (i * 80));
-		scoretext[i].setFont(font);
+		scoretext[i].setFont(font2);
 	}
 }
 

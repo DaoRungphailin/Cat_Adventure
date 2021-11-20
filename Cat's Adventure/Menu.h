@@ -24,7 +24,6 @@ public:
 	int getPressedItem();
 
 	//functions
-	/*void initBackground();*/
 	void moveUp();
 	void moveDown();
 

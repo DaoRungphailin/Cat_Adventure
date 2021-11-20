@@ -99,6 +99,9 @@ private:
 	int end;
 
 	//Username
+	sf::Texture nameBackgroundTex;
+	sf::Sprite nameBackground;
+
 	sf::Texture nameboardTex;
 	sf::Sprite nameboardSprite;
 	std::string player_name = "";
@@ -140,6 +143,7 @@ public:
 	void rederPlayer();
 	void renderWorld();
 	void renderMenu();
+	void renderNameBg();
 	void renderGameOver();
 	void render();
 	const sf::RenderWindow& getWindow() const;
