@@ -3,7 +3,7 @@
 #include"stdafx.h"
 #include"score.h"
 
-class score
+class Score
 {
 
 private:
@@ -13,7 +13,7 @@ private:
 	sf::Text top[5];
 	int i;
 	char temp[255];
-	size_t Score[6];
+	size_t score[6];
 	std::string name[6];
 	std::vector<std::pair<int, std::string>> userScore;
 
@@ -23,8 +23,8 @@ private:
 
 public:
 
-	score();
-	~score();
+	Score();
+	~Score();
 	void ReadFile();
 	void wFile();
 	std::string Pname;

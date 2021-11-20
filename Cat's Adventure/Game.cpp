@@ -42,8 +42,15 @@ void Game::initGameOver()
 	this->gameOver = new GameOver();
 }
 
+void Game::initUsername()
+{
+}
+
 Game::Game()
 {
+	timeUS = timeText.getElapsedTime().asMilliseconds();
+	end = 0;
+
 	this->initWindow();
 	this->initPlayer();
 	this->initWorld();
@@ -51,6 +58,8 @@ Game::Game()
 	this->initGUI();
 	this->initHpBar();
 	this->initGameOver();
+
+	//this->scoreBoard.wFile();
 }
 
 Game::~Game()
@@ -360,6 +369,14 @@ void Game::updateWorld()
 	this->backgroundX -= 0.5;
 }
 
+void Game::updateHighScore()
+{
+	if (scoreCheck == true)
+	{
+		this->renderHighScore();
+	}
+}
+
 void Game::update()
 {
 	//Polling window events
@@ -384,159 +401,205 @@ void Game::update()
 		}
 
 		//Set Menu
-		switch (ev.type)
+		if (IsOpen == false)
 		{
-		case sf::Event::KeyReleased:
-			switch (ev.key.code)
+			switch (ev.type)
 			{
-			case sf::Keyboard::Up:
-				this->menu->moveUp();
-				break;
-
-			case sf::Keyboard::Down:
-				this->menu->moveDown();
-				break;
-
-			case sf::Keyboard::Return:
-
-				switch (menu->getPressedItem())
+			case sf::Event::KeyReleased:
+				switch (ev.key.code)
 				{
-				case 0:
-					//printf("Player has been pressed");
-					//go to state
-					IsOpen = true;
+				case sf::Keyboard::Up:
+					this->menu->moveUp();
 					break;
 
-				case 1:
-					//go to state
-					//printf("Leader has been pressed");
+				case sf::Keyboard::Down:
+					this->menu->moveDown();
 					break;
 
-				case 2:
-					window.close();
-					break;
+				case sf::Keyboard::Return:
+
+					switch (menu->getPressedItem())
+					{
+					case 0:
+						//go to state Play
+						namestate = true;
+						break;
+
+					case 1:
+						//go to state LeaderBoard
+						printf("Leader has been pressed\n");
+						scoreCheck = true;
+						break;
+
+					case 2:
+						//go to state Exit
+						window.close();
+						break;
+					}
 				}
-			}
-			break;
+				break;
 
+			}
+		}
+
+
+		if (IsOpen == true && playerGUI->hp > 0)
+		{
+			this->updatePlayer();
+			this->updateCollision();
+			this->updateWorld();
+			this->updateCoin();
+			this->updateSpike();
+			this->updateHpBar();
+			this->updateHeartItem();
+			this->updateShield();
+			this->updateBomb();
+		}
+
+		if (scoreCheck == true)
+		{
+			this->renderHighScore();
 		}
 	}
 
-	if (IsOpen == true && playerGUI->hp > 0)
+	void Game::renderSpike()
 	{
-		this->updatePlayer();
-		this->updateCollision();
-		this->updateWorld();
-		this->updateCoin();
-		this->updateSpike();
-		this->updateHpBar();
-		this->updateHeartItem();
-		this->updateShield();
-		this->updateBomb();
-	}
-}
-
-void Game::renderSpike()
-{
-	for (auto* i : this->spike)
-	{
-		i->render(this->window);
-	}
-}
-
-void Game::renderShield()
-{
-	for (auto* i : this->shield)
-	{
-		i->render(this->window);
-
-		if (IsAura == true)
-			i->renderAura(this->window);
-	}
-}
-
-void Game::renderHeartItem()
-{
-	for (auto* i : this->heartItem)
-	{
-		i->render(this->window);
-	}
-}
-
-void Game::renderGUI()
-{
-	this->playerGUI->render(this->window);
-}
-
-void Game::renderCoin()
-{
-	for (auto* i:this->coin)
-	{
-		i->render(this->window);
-	}
-}
-
-void Game::renderBomb()
-{
-	for (auto* i : this->bomb)
-	{
-		i->render(this->window);
-	}
-}
-
-void Game::rederPlayer()
-{
-	this->player->render(this->window);//render players and send to window
-}
-
-void Game::renderWorld()
-{
-	this->window.draw(this->worldBackground);
-}
-
-
-void Game::render()
-{
-	this->window.clear();
-
-	if (IsOpen == true)
-	{
-
-		//Draw World
-		this->renderMenu();
-		this->renderWorld();
-
-		//Render Coin
-		this->renderCoin();
-
-		//Render Spike
-		this->renderSpike();
-
-		//Render Bomb
-		this->renderBomb();
-
-		//Render HpBar
-		this->renderGUI();
-
-		//Render Item
-		this->renderHeartItem();
-		this->renderShield();
 		
-		//Render game
-		this->rederPlayer();
-
-		//Game over screen
-		if (this->playerGUI->hp <= 0)
-			this->renderGameOver();
-
+		for (auto* i : this->spike)
+		{
+			i->render(this->window);
+		}
 	}
-	else
+
+	void Game::renderShield()
 	{
-		this->renderMenu();
+		for (auto* i : this->shield)
+		{
+			i->render(this->window);
+
+			if (IsAura == true)
+				i->renderAura(this->window);
+		}
 	}
 
-	this->window.display();
-}
+	void Game::renderHeartItem()
+	{
+		for (auto* i : this->heartItem)
+		{
+			i->render(this->window);
+		}
+	}
+
+	void Game::renderGUI()
+	{
+		this->playerGUI->render(this->window);
+	}
+
+	void Game::renderCoin()
+	{
+		for (auto* i : this->coin)
+		{
+			i->render(this->window);
+		}
+	}
+
+	void Game::renderBomb()
+	{
+		for (auto* i : this->bomb)
+		{
+			i->render(this->window);
+		}
+	}
+
+	void Game::renderHighScore()
+	{
+		this->scoreBoard.Drawscore(this->window);
+	}
+
+	void Game::renderUsername()
+	{
+		player_name = "";
+		font.loadFromFile("fontMeows-VGWjy.ttf");
+		sf::Text enter("Player name", font, 80);
+		enter.setFillColor(sf::Color::White);
+		enter.setPosition(550, 150);
+		p_name.setFont(font);
+		for (int i = 0; i < username.size(); i++)
+		{
+			player_name += username[i];
+		}
+		p_name.setCharacterSize(55);
+		if (username.empty())
+		{
+			p_name.setFillColor(sf::Color::White);
+			p_name.setString("_");
+		}
+		else
+		{
+			ss << player_name << "_";
+			std::string str = ss.str();
+			p_name.setString(str);
+			p_name.setFillColor(sf::Color::White);
+		}
+		p_name.setPosition(820 - (p_name.getGlobalBounds().width / 2), 330);
+
+		this->window.draw(p_name);
+		this->window.draw(enter);
+	}
+
+	void Game::rederPlayer()
+	{
+		this->player->render(this->window);//render players and send to window
+	}
+
+	void Game::renderWorld()
+	{
+		this->window.draw(this->worldBackground);
+	}
+
+
+	void Game::render()
+	{
+		this->window.clear();
+
+		if (IsOpen == true)
+		{
+			//Draw World
+			this->renderMenu();
+			this->renderWorld();
+
+			//Render Coin
+			this->renderCoin();
+
+			//Render Spike
+			this->renderSpike();
+
+			//Render Bomb
+			this->renderBomb();
+
+			//Render HpBar
+			this->renderGUI();
+
+			//Render Item
+			this->renderHeartItem();
+			this->renderShield();
+
+			//Render game
+			this->rederPlayer();
+
+			//Game over screen
+			if (this->playerGUI->hp <= 0)
+				this->renderGameOver();
+
+		}
+		else
+		{
+			this->renderMenu();
+		}
+
+		this->window.display();
+	}
+
 
 const sf::RenderWindow& Game::getWindow() const
 {
@@ -555,5 +618,6 @@ void Game::renderGameOver()
 {
 	this->gameOver->render(window);
 }
+
 
 

@@ -5,6 +5,7 @@
 #include<iostream>
 #include<time.h>
 #include<sstream>
+#include<vector>
 #include<string.h>
 #include<algorithm>
 

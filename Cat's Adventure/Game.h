@@ -9,6 +9,7 @@
 #include "Bomb.h"
 #include "Menu.h"
 #include "GameOver.h"
+#include "Score.h"
 
 class Game
 {
@@ -26,6 +27,7 @@ private:
 	void initGUI();
 	void initMenu();
 	void initGameOver();
+	void initUsername();
 
 	//ITEM
 	/*Boost Hp*/
@@ -83,7 +85,27 @@ private:
 
 	//Main Menu
 	Menu* menu;
-	bool IsOpen = true;
+	bool IsOpen = false;
+	bool scoreCheck = false;
+
+	//High Score
+	Score scoreBoard;
+	std::string name;
+	std::string user_name;
+	sf::Text US_name;
+	sf::Clock timeText;
+	float timeUS;
+	int end;
+
+	//Username
+	sf::Texture nameboardTex;
+	sf::Sprite nameboardSprite;
+	std::string player_name = "";
+	std::vector<char> username;
+	bool namestate = false;
+	sf::Text p_name;
+	sf::Font font;
+	std::stringstream ss;
 
 public:
 
@@ -94,6 +116,7 @@ public:
 	void run();
 
 	//Functions
+	void updateHighScore();
 	void updateShield();
 	void updateHeartItem();
 	void updateHpBar();
@@ -106,6 +129,8 @@ public:
 	void updatePollEvent();
 	void update();
 
+	void renderUsername();
+	void renderHighScore();
 	void renderShield();
 	void renderHeartItem();
 	void renderGUI();

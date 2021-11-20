@@ -3,9 +3,9 @@
 #include "score.h"
 
 using namespace std;
-score::score()
+Score::Score()
 {
-	font.loadFromFile("font/Meows-VGWjy.ttf");
+	font.loadFromFile("Fonts/Meows-VGWjy.ttf");
 	sf::Text ttext("ScoreBoard", font, 80);
 	main = ttext;
 	main.setFillColor(sf::Color::White);
@@ -20,34 +20,34 @@ score::score()
 	}
 }
 
-score::~score()
+Score::~Score()
 {
 
 }
 
-void score::ReadFile()
+void Score::ReadFile()
 {
 	fp = fopen("./score.txt", "r");
 	for (int i = 0; i < 5; i++)
 	{
-		fscanf_s(fp, "%s", &temp);
+		fscanf(fp, "%s", &temp);
 		name[i] = temp;
-		fscanf_s(fp, "%d", &Score[i]);
-		this->userScore.push_back(make_pair(Score[i], name[i]));
+		fscanf(fp, "%d", &score[i]);
+		this->userScore.push_back(make_pair(score[i], name[i]));
 	}
 }
 
-void score::wFile()
+void Score::wFile()
 {
 	ReadFile();
 	this->name[5] = Pname;
-	this->Score[5] = scoreplayer;
-	this->userScore.push_back(make_pair(this->Score[5], this->name[5]));
+	this->score[5] = scoreplayer;
+	this->userScore.push_back(make_pair(this->score[5], this->name[5]));
 	sort(userScore.begin(), userScore.end());
+
 	fp = fopen("./score.txt", "w");
 	for (int i = 5; i > 0; i--)
 	{
-
 		strcpy(temp, userScore[i].second.c_str());
 		fprintf(fp, "%s %d\n", temp, userScore[i].first);
 	}
@@ -59,11 +59,11 @@ void score::wFile()
 	fclose(this->fp);
 }
 
-void score::setscoretext()
+void Score::setscoretext()
 {
 }
 
-void score::Drawscore(sf::RenderWindow& window)
+void Score::Drawscore(sf::RenderWindow& window)
 {
 	std::stringstream ss[5];
 	ReadFile();
