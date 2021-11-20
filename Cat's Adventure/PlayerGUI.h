@@ -26,7 +26,7 @@ public:
 	PlayerGUI();
 	virtual ~PlayerGUI();
 
-	int  hp = 100;
+	int  hp = 0;
 	int score = 0;
 
 	//Function

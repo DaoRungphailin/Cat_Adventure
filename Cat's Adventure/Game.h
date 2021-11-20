@@ -87,6 +87,7 @@ private:
 	Menu* menu;
 	bool IsOpen = false;
 	bool scoreCheck = false;
+	bool menuCheck = true;
 
 	//High Score
 	Score scoreBoard;
@@ -103,6 +104,7 @@ private:
 	std::string player_name = "";
 	std::vector<char> username;
 	bool namestate = false;
+	sf::RectangleShape textBox;
 
 public:
 
@@ -125,7 +127,6 @@ public:
 	void updatePlayer();
 	void updateCollision();
 	void updateWorld();
-	void updatePollEvent();
 	void update();
 
 	void renderUsername();

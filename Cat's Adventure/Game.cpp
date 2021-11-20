@@ -399,6 +399,14 @@ void Game::update()
 			this->player->resetAnimationTimer();
 		}
 
+		//Game Over
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			menuCheck = true;
+			IsOpen = false;
+			printf("space press\n");
+		}
+
 		//Set Menu
 		if (IsOpen == false)
 		{
@@ -422,12 +430,16 @@ void Game::update()
 					case 0:
 						//go to state Play
 						namestate = true;
+						menuCheck = false;
+						scoreCheck = false;
 						break;
 
 					case 1:
 						//go to state LeaderBoard
 						//printf("Leader has been pressed\n");
-						//scoreCheck = true;
+						scoreCheck = true;
+						menuCheck = false;
+						namestate = false;
 						break;
 
 					case 2:
@@ -453,11 +465,6 @@ void Game::update()
 			this->updateHeartItem();
 			this->updateShield();
 			this->updateBomb();
-		}
-
-		if (scoreCheck == true)
-		{
-			this->renderHighScore();
 		}
 	}
 }
@@ -531,7 +538,7 @@ void Game::update()
 		font.loadFromFile("Fonts/Meows-VGWjy.ttf");
 		sf::Text enter("Player name", font, 80);
 		enter.setFillColor(sf::Color::White);
-		enter.setPosition(550, 150);
+		enter.setPosition(650, 150);
 		p_name.setFont(font);
 		for (int i = 0; i < username.size(); i++)
 		{
@@ -603,9 +610,7 @@ void Game::update()
 			{
 
 				this->getName(player_name);
-				//namestate = true;
 				namestate = false;
-				//printf("Enter");
 				IsOpen = true;
 				std::cout << player_name;
 			}
@@ -640,26 +645,29 @@ void Game::update()
 			//Game over screen
 			if (this->playerGUI->hp <= 0)
 			{
+				//Saving Score
 				this->scoreBoard.scoreplayer = playerGUI->score;
 
 				if (end < 1)
 				{
-
 					this->scoreBoard.wFile();
 					end++;
 				}
-				this->renderHighScore();
 				this->renderGameOver();
 			}
-
 		}
 		else
 		{
+			if(menuCheck == true)
 			this->renderMenu();
 
-			if (namestate)
+			else
 			{
-				this->renderUsername();
+				if (namestate)
+					this->renderUsername();
+
+				if (scoreCheck == true)
+					this->renderHighScore();
 			}
 		}
 

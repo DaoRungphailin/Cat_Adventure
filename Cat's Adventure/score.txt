@@ -1,5 +1,5 @@
 aaa 800
 ddd 600
 fff 500
-bbb 200
-ccc 100
+deja 420
+dd 340
