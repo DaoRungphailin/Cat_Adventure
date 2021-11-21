@@ -411,7 +411,7 @@ void Game::updateHighScore()
 
 void Game::updateSound()
 {
-	if (IsOpen == true && ThemeSongOn == false)
+	if (gameOverCheck == false && ThemeSongOn == false)
 	{
 		ThemeSongOn = true;
 		sound[0].play();
@@ -420,9 +420,11 @@ void Game::updateSound()
 
 	if (gameOverCheck == true && GameOverSong == true)
 	{
+		printf("gameOver sound\n");
+		GameOverSong = false;
+		sound[0].stop();
 		sound[1].play();
 		sound[1].setVolume(1.5);
-		GameOverSong = false;
 	}
 }
 
@@ -504,7 +506,6 @@ void Game::update()
 
 		if (IsOpen == true && playerGUI->hp > 0)
 		{
-			this->updateSound();
 			this->updatePlayer();
 			this->updateCollision();
 			this->updateWorld();
@@ -515,6 +516,7 @@ void Game::update()
 			this->updateShield();
 			this->updateBomb();
 		}
+			this->updateSound();
 }
 
 	void Game::renderSpike()
@@ -704,6 +706,12 @@ void Game::update()
 			//Render game
 			this->rederPlayer();
 
+			if (this->playerGUI->hp <= 0)
+				IsOpen = false;
+			
+		}
+		else
+		{
 			//Game over screen
 			if (this->playerGUI->hp <= 0)
 			{
@@ -714,16 +722,15 @@ void Game::update()
 				{
 					this->scoreBoard.wFile();
 					end++;
+
+					//GameOver check
+					gameOverCheck = true;
+					GameOverSong = true;
 				}
 				//render GameOver
 				this->renderGameOver();
-				gameOverCheck = true;
-				GameOverSong = true;
-				ThemeSongOn = false;
 			}
-		}
-		else
-		{
+
 			if(menuCheck == true)
 			this->renderMenu();
 
