@@ -610,6 +610,9 @@ void Game::update()
 		window.draw(p_name);
 		window.draw(enter);
 		this->renderMenuPress();
+		//Enter to continue
+		this->menuPressText.setString("Press \"Enter\" to continue");
+		this->menuPressText.setPosition(1700.f / 2.f - this->menuPressText.getGlobalBounds().width / 2.f, 760.f / 2.f - this->menuPressText.getGlobalBounds().height / 2.f + 310.f);
 	}
 
 	void Game::renderMenuPress()

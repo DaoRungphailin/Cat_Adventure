@@ -116,6 +116,7 @@ private:
 	//Press to go to Menu
 	std::string menuPress;
 	sf::Text menuPressText;
+	sf::Text backMenu;
 
 	//Sound
 	sf::SoundBuffer buffer[3];

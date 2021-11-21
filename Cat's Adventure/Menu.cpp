@@ -19,10 +19,26 @@ void Menu::initBackground()
 	this->menuSprite.setScale(1.4f, 1.4f);
 }
 
+void Menu::initName()
+{
+	myName.setFont(font);
+	myName.setCharacterSize(35);
+	myName.setFillColor(sf::Color::Black);
+	myName.setString("64011258 Rungphailin Samanantakun");
+	myName.setPosition(1150.f, 680.f);
+
+	this->MynameBox.setOutlineColor(sf::Color::White);
+	this->MynameBox.setOutlineThickness(10.f);
+	this->MynameBox.setFillColor(sf::Color::White);
+	this->MynameBox.setSize(sf::Vector2f(myName.getLocalBounds().width, myName.getLocalBounds().height ));
+	this->MynameBox.setPosition(this->myName.getPosition().x, this->myName.getPosition().y);
+}
+
 Menu::Menu(float width, float height)
 {
 	this->initBackground();
 	this->initFont();
+	this->initName();
 
 	/*Init Menu*/
 	menu[0].setFont(font);
@@ -77,11 +93,23 @@ void Menu::moveDown()
 	}
 }
 
-void Menu::render(sf::RenderWindow& window)
+void Menu::renderMenu(sf::RenderWindow& target)
 {
-	window.draw(menuSprite);
+	target.draw(menuSprite);
 	for (int i = 0; i < MAX_ITEMS; i++)
 	{
-		window.draw(menu[i]);
+		target.draw(menu[i]);
 	}
+}
+
+void Menu::renderName(sf::RenderWindow& target)
+{
+	target.draw(this->MynameBox);
+	target.draw(this->myName);
+}
+
+void Menu::render(sf::RenderWindow& target)
+{
+	this->renderMenu(target);
+	this->renderName(target);
 }

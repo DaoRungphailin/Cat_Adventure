@@ -14,8 +14,15 @@ private:
 	sf::Sprite menuSprite;
 	sf::Texture menuTex;
 
+	//Name
+	sf::RectangleShape MynameBox;
+	sf::Font font2;
+	sf::Text myName;
+
+
 	void initFont();
 	void initBackground();
+	void initName();
 
 public:
 	Menu(float width, float height);
@@ -27,6 +34,8 @@ public:
 	void moveUp();
 	void moveDown();
 
+	void renderMenu(sf::RenderWindow& target);
+	void renderName(sf::RenderWindow& target);
 	void render(sf::RenderWindow& window);
 };
 
