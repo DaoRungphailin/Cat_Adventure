@@ -204,15 +204,8 @@ void Player::updateMovement()
 				this->timeJumping.restart();
 				jumpTimes++;
 			}
-		}
-		//this->animState = PLAYER_ANIMATION_STATES::JUMPING;
-		
+		}		
 	}
-	/*else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))//Down
-	{
-		this->sprite.move(0.f, 3.f);
-		this->animState = PLAYER_ANIMATION_STATES::FALLING;
-	}*/
 }
 
 void Player::updateAnimations()

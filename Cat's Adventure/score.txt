@@ -1,5 +1,5 @@
+ds 1070
+ty 870
 aaa 800
 ddd 600
-fff 500
-deja 420
-kkk 370
+ww 520

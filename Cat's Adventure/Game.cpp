@@ -14,8 +14,11 @@ void Game::initMenuPress()
 
 void Game::initSound()
 {
-	buffer.loadFromFile("Sound/03 - Super Mario Bros 2 Main Theme.wav");
-	sound.setBuffer(buffer);
+	buffer[0].loadFromFile("Sound/03 - Super Mario Bros 2 Main Theme.wav");
+	sound[0].setBuffer(buffer[0]);
+
+	buffer[1].loadFromFile("Sound/16 - Game Over.wav");
+	sound[1].setBuffer(buffer[1]);
 }
 
 void Game::initWindow()
@@ -124,7 +127,7 @@ Game::~Game()
 void Game::updateShield()
 {
 	//Count Shield
-	if (this->randomShield.getElapsedTime().asSeconds() >= 0.5f)
+	if (this->playerGUI->score % 150 == 0)
 	{
 		if (countShield < 1)
 		{
@@ -283,13 +286,19 @@ void Game::updateBomb()
 	//Count Bomb
 	if (this->playerGUI->score >= 200)
 	{
-		if (countBomb < 1)
+		if (countBomb < addBomb)
 		{
 			bombX = 60 + rand() % 1500;
-			bombY = 100 + rand() % 500;
+			bombY = rand() % 500;
 			this->bomb.push_back(new Bomb(bombX, bombY));
 			this->randomBomb.restart();
 			countBomb++;
+		}
+
+		//Add Bomb 
+		if (this->playerGUI->score % 200 == 0 && addBomb <= 3)
+		{
+			addBomb++;
 		}
 	}
 
@@ -400,15 +409,25 @@ void Game::updateHighScore()
 	}
 }
 
+void Game::updateSound()
+{
+	if (IsOpen == true && ThemeSongOn == false)
+	{
+		ThemeSongOn = true;
+		sound[0].play();
+		sound[0].setVolume(1.5);
+	}
+
+	if (gameOverCheck == true && GameOverSong == true)
+	{
+		sound[1].play();
+		sound[1].setVolume(1.5);
+		GameOverSong = false;
+	}
+}
+
 void Game::update()
 {
-
-	/*if (IsOpen == true)
-	{
-		sound.play();
-		sound.setVolume(1);
-	}*/
-
 	//Polling window events
 	while (this->window.pollEvent(this->ev))
 	{
@@ -481,11 +500,11 @@ void Game::update()
 
 			}
 		}
+	}
 
 		if (IsOpen == true && playerGUI->hp > 0)
 		{
-			//sound.play();
-			//sound.setVolume(1);
+			this->updateSound();
 			this->updatePlayer();
 			this->updateCollision();
 			this->updateWorld();
@@ -496,7 +515,6 @@ void Game::update()
 			this->updateShield();
 			this->updateBomb();
 		}
-	}
 }
 
 	void Game::renderSpike()
@@ -694,7 +712,11 @@ void Game::update()
 					this->scoreBoard.wFile();
 					end++;
 				}
+				//render GameOver
 				this->renderGameOver();
+				gameOverCheck = true;
+				GameOverSong = true;
+				ThemeSongOn = false;
 			}
 		}
 		else

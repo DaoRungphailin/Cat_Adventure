@@ -72,6 +72,7 @@ private:
 	float bombX = 0;
 	float bombY = 0;
 	int countBomb = 0;
+	int addBomb = 0;
 
 	//GUI
 	PlayerGUI* playerGUI;
@@ -79,6 +80,7 @@ private:
 
 	//Game Over
 	GameOver* gameOver;
+	bool gameOverCheck = false;
 
 	//World
 	sf::Texture worldBackgroundTex;
@@ -116,9 +118,10 @@ private:
 	sf::Text menuPressText;
 
 	//Sound
-	sf::SoundBuffer buffer;
-	sf::Sound sound;
-	bool soundOn = false;
+	sf::SoundBuffer buffer[3];
+	sf::Sound sound[3];
+	bool ThemeSongOn = false;
+	bool GameOverSong = false;
 
 public:
 
@@ -129,7 +132,7 @@ public:
 	void run();
 
 	//Functions
-	void updateThemeSong();
+	void updateSound();
 	void updateHighScore();
 	void updateShield();
 	void updateHeartItem();
