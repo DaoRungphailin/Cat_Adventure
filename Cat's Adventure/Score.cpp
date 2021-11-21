@@ -19,6 +19,7 @@ Score::Score()
 	font.loadFromFile("Fonts/baby blocks.ttf");
 	font2.loadFromFile("Fonts/rainyhearts.ttf");
 	sf::Text ttext("SCOREBOARD", font, 80);
+	ttext.setOutlineThickness(1.5f);
 	main = ttext;
 	main.setFillColor(sf::Color::Black);
 	main.setOrigin(sf::Vector2f(main.getGlobalBounds().width / 2, 0));

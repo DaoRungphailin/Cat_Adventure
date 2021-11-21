@@ -20,6 +20,7 @@ private:
 	Player* player;
 
 	//Private function
+	void initMenuPress();
 	void initSound();
 	void initWindow();
 	void initPlayer();
@@ -89,6 +90,7 @@ private:
 	bool IsOpen = false;
 	bool scoreCheck = false;
 	bool menuCheck = true;
+	sf::Font font2;
 
 	//High Score
 	Score scoreBoard;
@@ -109,9 +111,14 @@ private:
 	bool namestate = false;
 	sf::RectangleShape textBox;
 
+	//Press to go to Menu
+	std::string menuPress;
+	sf::Text menuPressText;
+
 	//Sound
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
+	bool soundOn = false;
 
 public:
 
@@ -122,8 +129,7 @@ public:
 	void run();
 
 	//Functions
-	void getName(std::string name);
-
+	void updateThemeSong();
 	void updateHighScore();
 	void updateShield();
 	void updateHeartItem();
@@ -136,7 +142,9 @@ public:
 	void updateWorld();
 	void update();
 
+	void renderMenuPress();
 	void renderUsername();
+	void getName(std::string name);
 	void renderHighScore();
 	void renderShield();
 	void renderHeartItem();

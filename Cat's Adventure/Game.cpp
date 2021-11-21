@@ -2,6 +2,16 @@
 #include "Game.h"
 
 
+void Game::initMenuPress()
+{
+	this->font2.loadFromFile("Fonts/rainyhearts.ttf");
+	this->menuPressText.setFont(this->font2);
+	this->menuPressText.setFillColor(sf::Color::Black); //(255, 235, 59, 500)
+	this->menuPressText.setCharacterSize(50.f);
+	this->menuPressText.setString("Press \"Space Bar\" to exit to mainmenu");
+	this->menuPressText.setPosition(1700.f / 2.f - this->menuPressText.getGlobalBounds().width / 2.f, 760.f / 2.f - this->menuPressText.getGlobalBounds().height / 2.f + 310.f);
+}
+
 void Game::initSound()
 {
 	buffer.loadFromFile("Sound/03 - Super Mario Bros 2 Main Theme.wav");
@@ -63,6 +73,7 @@ Game::Game()
 	timeUS = timeText.getElapsedTime().asMilliseconds();
 	end = 0;
 
+	this->initMenuPress();
 	this->initWindow();
 	this->initSound();
 	this->initUsername();
@@ -391,6 +402,13 @@ void Game::updateHighScore()
 
 void Game::update()
 {
+
+	/*if (IsOpen == true)
+	{
+		sound.play();
+		sound.setVolume(1);
+	}*/
+
 	//Polling window events
 	while (this->window.pollEvent(this->ev))
 	{
@@ -419,7 +437,7 @@ void Game::update()
 		}
 
 		//Set Menu
-		if (IsOpen == false)
+		if (menuCheck == true)
 		{
 			switch (ev.type)
 			{
@@ -464,11 +482,10 @@ void Game::update()
 			}
 		}
 
-
 		if (IsOpen == true && playerGUI->hp > 0)
 		{
-			sound.play();
-			sound.setVolume(1);
+			//sound.play();
+			//sound.setVolume(1);
 			this->updatePlayer();
 			this->updateCollision();
 			this->updateWorld();
@@ -548,8 +565,8 @@ void Game::update()
 		player_name = "";
 		sf::Text p_name;
 		sf::Font font;
-		font.loadFromFile("Fonts/upheavtt.ttf");
-		sf::Text enter("Player name", font, 80);
+		font.loadFromFile("Fonts/Meows-VGWjy.ttf");
+		sf::Text enter("Player name", font, 90);
 		enter.setFillColor(sf::Color::Black);
 		enter.setPosition(600, 200);
 		p_name.setFont(font);
@@ -574,6 +591,12 @@ void Game::update()
 
 		window.draw(p_name);
 		window.draw(enter);
+		this->renderMenuPress();
+	}
+
+	void Game::renderMenuPress()
+	{
+		this->window.draw(menuPressText);
 	}
 
 	void Game::renderNameBg()
@@ -685,12 +708,14 @@ void Game::update()
 				{
 					this->renderNameBg();
 					this->renderUsername();
+					this->renderMenuPress();
 				}
 
 				if (scoreCheck == true)
 				{
 					this->scoreBoard.renderScoreBackground(window);
 					this->renderHighScore();
+					this->renderMenuPress();
 				}
 			}
 		}
