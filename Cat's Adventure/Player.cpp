@@ -154,7 +154,7 @@ void Player::updatePhysics()
 	if(this->gravityBool == true)
 		this->velocity.y += (1.0 * this->gravity);
 
-	if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height > 650)
+	if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height >= 650)
 	{
 		jumpTimes = 0;
 	}
@@ -193,7 +193,7 @@ void Player::updateMovement()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))//Top
 	{
-		if (this->getPosition().y > 0)
+		if (1700 - this->sprite.getGlobalBounds().height - 110.f > 0)
 		{
 			if (delayJump > 0.2f && jumpTimes < 1)
 			{

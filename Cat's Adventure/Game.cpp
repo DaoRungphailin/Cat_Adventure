@@ -385,7 +385,7 @@ void Game::updatePlayer()
 void Game::updateCollision()
 {
 	//Collision bottom of screen
-	if (this->player->getPosition().y + this->player->getGlobalBounds().height - 110.f > this->window.getSize().y)
+	if (this->player->getPosition().y + this->player->getGlobalBounds().height + 110.f > this->window.getSize().y)
 	{
 		this->player->resetVelocityY();
 		this->player->jumping = false;
