@@ -128,10 +128,11 @@ private:
 	sf::Text backMenu;
 
 	//Sound
-	sf::SoundBuffer buffer[3];
-	sf::Sound sound[3];
+	sf::SoundBuffer buffer[4];
+	sf::Sound sound[4];
 	bool ThemeSongOn = false;
 	bool GameOverSong = false;
+	bool LevelUp = false;
 
 public:
 
@@ -143,6 +144,7 @@ public:
 	void cheat();
 
 	//Functions
+	void updateLevel();
 	void updateSound();
 	void updateHighScore();
 	void updateMagnet();

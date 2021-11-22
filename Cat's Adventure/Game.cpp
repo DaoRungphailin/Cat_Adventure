@@ -14,11 +14,21 @@ void Game::initMenuPress()
 
 void Game::initSound()
 {
+	//Game run
 	buffer[0].loadFromFile("Sound/03 - Super Mario Bros 2 Main Theme.wav");
 	sound[0].setBuffer(buffer[0]);
 
+	//Game Over
 	buffer[1].loadFromFile("Sound/16 - Game Over.wav");
 	sound[1].setBuffer(buffer[1]);
+
+	//Level up
+	buffer[2].loadFromFile("Sound/06 - Power Up.wav");
+	sound[2].setBuffer(buffer[2]);
+
+	//Menu Sound
+	buffer[3].loadFromFile("Sound/01 - Title Screen.wav");
+	sound[3].setBuffer(buffer[3]);
 }
 
 void Game::initWindow()
@@ -163,7 +173,7 @@ void Game::updateShield()
 	for (size_t i = 0; i < this->shield.size(); i++)
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->shield[i]->getGlobalBoundsHitbox())
-			&& this->delayShield.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp >= 0)
+			&& this->delayShield.getElapsedTime().asSeconds() >= 0.5f && this->playerGUI->hp >= 0)
 		{
 			//Do not decrease Hp
 			this->playerGUI->setHp(0);
@@ -208,7 +218,7 @@ void Game::updateHeartItem()
 		if (countHeart < 1)
 		{
 			heartX = 60 + rand() % 1500;
-			heartY = 100 + rand() % 500;
+			heartY = 100 + rand() % 410;
 			this->heartItem.push_back(new HeartItem(heartX, heartY));
 			countHeart++;
 		}
@@ -265,6 +275,7 @@ void Game::updateSpike()
 	//LEVEL 5
 	if (this->playerGUI->score == 800)
 	{
+		this->playerGUI->level = 5;
 		if (countSpike < 10)
 		{
 			spikeX += 250.f;
@@ -304,12 +315,13 @@ void Game::updateBomb()
 {
 	//Count Bomb
 	//LEVEL 2
-	if (this->playerGUI->score >= 200)
+	if (this->playerGUI->score >= 200 && this->playerGUI->score < 400)
 	{
+		this->playerGUI->level = 2;
 		if (countBomb < 1)
 		{
 			bombX = 60 + rand() % 1500;
-			bombY = rand() % 500;
+			bombY = 100 + rand() % 410;
 			this->bomb.push_back(new Bomb(bombX, bombY));
 			this->randomBomb.restart();
 			countBomb++;
@@ -318,12 +330,13 @@ void Game::updateBomb()
 
 	//Add Bomb
 	//LEVEL 3 
-	if (this->playerGUI->score == 400)
+	if (this->playerGUI->score >= 400 && this->playerGUI->score < 600)
 	{
+		this->playerGUI->level = 3;
 		if (countBomb < 2)
 		{
 			bombX = 60 + rand() % 1500;
-			bombY = rand() % 500;
+			bombY = 100 + rand() % 410;
 			this->bomb.push_back(new Bomb(bombX, bombY));
 			this->randomBomb.restart();
 			countBomb++;
@@ -331,12 +344,13 @@ void Game::updateBomb()
 	}
 
 	//LEVEL 4
-	if (this->playerGUI->score == 600)
+	if (this->playerGUI->score >= 600 && this->playerGUI->score < 800)
 	{
+		this->playerGUI->level = 4;
 		if (countBomb < 3)
 		{
 			bombX = 60 + rand() % 1500;
-			bombY = rand() % 500;
+			bombY = 100 + rand() % 410;
 			this->bomb.push_back(new Bomb(bombX, bombY));
 			this->randomBomb.restart();
 			countBomb++;
@@ -377,6 +391,7 @@ void Game::updateBomb()
 	}
 }
 
+
 void Game::updateCoin()
 {
 	//Random Coin
@@ -385,7 +400,7 @@ void Game::updateCoin()
 		if (countCoin < 12)
 		{
 			coinX = rand() % 1700;
-			coinY = rand() % 500;
+			coinY = 100 + rand() % 410;
 			this->coin.push_back(new Coin(coinX, coinY));
 			this->randomCoin.restart();
 			countCoin++;
@@ -500,7 +515,7 @@ void Game::updateHighScore()
 
 void Game::updateSound()
 {
-	if (gameOverCheck == false && ThemeSongOn == false)
+	if (gameOverCheck == false && ThemeSongOn == false && menuCheck == false)
 	{
 		ThemeSongOn = true;
 		sound[0].play();
@@ -514,6 +529,27 @@ void Game::updateSound()
 		sound[1].play();
 		sound[1].setVolume(1.5);
 	}
+
+	if (LevelUp == true)
+	{
+		LevelUp = false;
+		sound[2].play();
+		sound[2].setVolume(1.5);
+	}
+
+	if (menuCheck == true || namestate == true || scoreCheck == true)
+	{
+		printf("menu\n");
+		sound[0].stop();
+		sound[3].play();
+		sound[3].setVolume(1.5);
+	}
+}
+
+void Game::updateLevel()
+{
+	if (this->playerGUI->score % 200 == 0 && this->playerGUI->score != 0)
+		LevelUp = true;
 }
 
 void Game::update()
@@ -594,6 +630,7 @@ void Game::update()
 
 		if (IsOpen == true && playerGUI->hp > 0)
 		{
+			this->updateLevel();
 			this->updatePlayer();
 			this->updateCollision();
 			this->updateWorld();

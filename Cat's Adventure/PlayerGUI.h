@@ -6,6 +6,7 @@ class PlayerGUI
 private:
 	
 	sf::Font font;
+	sf::Font font2;
 
 	//Score Bar
 	std::string scoreString;
@@ -18,9 +19,14 @@ private:
 	sf::RectangleShape hpBarBack;
 	sf::RectangleShape hpBarInner;
 
+	//Level
+	std::string levelString;
+	sf::Text levelText;
+
 	void initFont();
 	void initHpBar();
 	void initScoreBar();
+	void initLevel();
 
 public:
 	PlayerGUI();
@@ -33,11 +39,12 @@ public:
 	//Function
 	void setScore(int n);
 	void setHp(int n);
-	void setLevel(int n);
 	void updateScore();
 	void updateHpBar();
+	void updateLevel();
 	void update();
 
+	void renderLevel(sf::RenderTarget& target);
 	void renderScore(sf::RenderTarget& target);
 	void renderHpBar(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);

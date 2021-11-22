@@ -5,6 +5,9 @@ void PlayerGUI::initFont()
 {
 	if(!this->font.loadFromFile("Fonts/rainyhearts.ttf"))
 		std::cout << "ERROR::PLAYERGUI::Could not load the Font sheet!" << "\n";
+
+	if (!this->font2.loadFromFile("Fonts/3Dventure.ttf"))
+		std::cout << "ERROR::MENU::Could not load the Font sheet!" << "\n";
 }
 
 void PlayerGUI::initHpBar()
@@ -31,9 +34,17 @@ void PlayerGUI::initHpBar()
 void PlayerGUI::initScoreBar()
 {
 	this->scoreText.setFont(this->font);
-	this->scoreText.setFillColor(sf::Color::Black); //(255, 235, 59, 500)
+	this->scoreText.setFillColor(sf::Color::Black);
 	this->scoreText.setCharacterSize(40.f);
 	this->scoreText.setPosition(1500.f, 10.f);
+}
+
+void PlayerGUI::initLevel()
+{
+	this->levelText.setFont(this->font2);
+	this->levelText.setFillColor(sf::Color::Black);
+	this->levelText.setCharacterSize(50.f);
+	this->levelText.setPosition(800 - this->levelText.getGlobalBounds().width, 10.f);
 }
 
 PlayerGUI::PlayerGUI()
@@ -41,9 +52,11 @@ PlayerGUI::PlayerGUI()
 	this->initFont();
 	this->initHpBar();
 	this->initScoreBar();
+	this->initLevel();
 
 	this->hp;
 	this->score;
+	this->level;
 }
 
 PlayerGUI::~PlayerGUI()
@@ -62,16 +75,18 @@ void PlayerGUI::setHp(int n)
 		this->hp += n;
 }
 
-void PlayerGUI::setLevel(int n)
-{
-}
-
 void PlayerGUI::updateHpBar()
 {
 	this->hpBarInner.setSize(sf::Vector2f(this->hp * 3, this->hpBarInner.getSize().y));
 
 	this->hpBarString = std::to_string(this->hp) + " / " + std::to_string(100);
 	this->hpBarText.setString(this->hpBarString);
+}
+
+void PlayerGUI::updateLevel()
+{
+	this->levelString = "Level " + std::to_string(this->level);
+	this->levelText.setString(this->levelString);
 }
 
 void PlayerGUI::updateScore()
@@ -84,6 +99,12 @@ void PlayerGUI::update()
 {
 	this->updateHpBar();
 	this->updateScore();
+	this->updateLevel();
+}
+
+void PlayerGUI::renderLevel(sf::RenderTarget& target)
+{
+	target.draw(this->levelText);
 }
 
 void PlayerGUI::renderScore(sf::RenderTarget& target)
@@ -103,4 +124,5 @@ void PlayerGUI::render(sf::RenderTarget& target)
 {
 	this->renderHpBar(target);
 	this->renderScore(target);
+	this->renderLevel(target);
 }
