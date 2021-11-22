@@ -62,6 +62,10 @@ void PlayerGUI::setHp(int n)
 		this->hp += n;
 }
 
+void PlayerGUI::setLevel(int n)
+{
+}
+
 void PlayerGUI::updateHpBar()
 {
 	this->hpBarInner.setSize(sf::Vector2f(this->hp * 3, this->hpBarInner.getSize().y));

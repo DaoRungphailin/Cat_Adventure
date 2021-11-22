@@ -10,6 +10,7 @@
 #include "Menu.h"
 #include "GameOver.h"
 #include "Score.h"
+#include "Magnet.h"
 
 class Game
 {
@@ -50,6 +51,14 @@ private:
 	float shieldX = 0;
 	float shieldY = 0;
 	int countShield = 0;
+
+	/*Magnet*/
+	std::vector<Magnet*> magnet;
+	sf::Clock randomMagnet;
+	sf::Clock delayMagnet;
+	float magnetX = 0;
+	float magnetY = 0;
+	int countMagnet = 0;
 
 	//Coin
 	std::vector<Coin*> coin;
@@ -129,12 +138,14 @@ public:
 	//Functions
 	Game();
 	virtual ~Game();
-
 	void run();
+
+	void cheat();
 
 	//Functions
 	void updateSound();
 	void updateHighScore();
+	void updateMagnet();
 	void updateShield();
 	void updateHeartItem();
 	void updateHpBar();
@@ -150,6 +161,7 @@ public:
 	void renderUsername();
 	void getName(std::string name);
 	void renderHighScore();
+	void renderMagnet();
 	void renderShield();
 	void renderHeartItem();
 	void renderGUI();

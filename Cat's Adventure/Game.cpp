@@ -122,6 +122,20 @@ Game::~Game()
 	{
 		delete i;
 	}
+
+	//Magnet
+	for (auto* i : this->magnet)
+	{
+		delete i;
+	}
+}
+
+void Game::cheat()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+	{
+		this->playerGUI->hp = 100;
+	}
 }
 
 void Game::updateShield()
@@ -165,11 +179,6 @@ void Game::updateShield()
 			break;
 
 		}
-		/*else
-		{
-			IsAura = false;
-			IsStart = false;
-		}*/
 
 		//Left of screen
 		if (this->shield[i]->getPosition().x + this->shield[i]->getGlobalbounds().width < 0)
@@ -214,7 +223,7 @@ void Game::updateHeartItem()
 	//Collision
 	for (size_t i = 0; i < heartItem.size(); i++)
 	{
-		if (this->player->getGlobalBoundsHitbox().intersects(this->heartItem[i]->getGlobalbounds()) 
+		if (this->player->getGlobalBoundsHitbox().intersects(this->heartItem[i]->getGlobalBoundsHitbox()) 
 			&& this->delayHeart.getElapsedTime().asSeconds() > 0.5f && this->playerGUI->hp <= 80)
 		{
 			//Boost Hp
@@ -246,10 +255,21 @@ void Game::updateHpBar()
 void Game::updateSpike()
 {
 	//Count Spike
+	//LEVEL 1
 	if(countSpike < 10)
 	{
 		spikeX += 500.f;
 		this->spike.push_back(new Spike(spikeX, 610));
+	}
+
+	//LEVEL 5
+	if (this->playerGUI->score == 800)
+	{
+		if (countSpike < 10)
+		{
+			spikeX += 250.f;
+			this->spike.push_back(new Spike(spikeX, 610));
+		}
 	}
 
 	//Update
@@ -263,8 +283,7 @@ void Game::updateSpike()
 	{
 		if (this->player->getGlobalBoundsHitbox().intersects(this->spike[i]->getGlobalBoundsHitbox()) 
 			&& this->delayCrash.getElapsedTime().asSeconds() >= 0.6f && this->playerGUI->hp >= 10
-			&& this->delayAura.getElapsedTime().asSeconds() >= 5.f
-			/* && IsStart == true */)
+			&& this->delayAura.getElapsedTime().asSeconds() >= 5.f)
 		{
 				this->playerGUI->setHp(-10);
 				this->delayCrash.restart();
@@ -284,9 +303,10 @@ void Game::updateSpike()
 void Game::updateBomb()
 {
 	//Count Bomb
+	//LEVEL 2
 	if (this->playerGUI->score >= 200)
 	{
-		if (countBomb < addBomb)
+		if (countBomb < 1)
 		{
 			bombX = 60 + rand() % 1500;
 			bombY = rand() % 500;
@@ -294,11 +314,32 @@ void Game::updateBomb()
 			this->randomBomb.restart();
 			countBomb++;
 		}
+	}
 
-		//Add Bomb 
-		if (this->playerGUI->score % 200 == 0 && addBomb <= 3)
+	//Add Bomb
+	//LEVEL 3 
+	if (this->playerGUI->score == 400)
+	{
+		if (countBomb < 2)
 		{
-			addBomb++;
+			bombX = 60 + rand() % 1500;
+			bombY = rand() % 500;
+			this->bomb.push_back(new Bomb(bombX, bombY));
+			this->randomBomb.restart();
+			countBomb++;
+		}
+	}
+
+	//LEVEL 4
+	if (this->playerGUI->score == 600)
+	{
+		if (countBomb < 3)
+		{
+			bombX = 60 + rand() % 1500;
+			bombY = rand() % 500;
+			this->bomb.push_back(new Bomb(bombX, bombY));
+			this->randomBomb.restart();
+			countBomb++;
 		}
 	}
 
@@ -311,8 +352,9 @@ void Game::updateBomb()
 	//Collision
 	for (size_t i = 0; i < bomb.size(); i++)
 	{
-		if (this->player->getGlobalBoundsHitbox().intersects(this->bomb[i]->getGlobalbounds())
-			&& this->delayBomb.getElapsedTime().asSeconds() > 0.5f)
+		if (this->player->getGlobalBoundsHitbox().intersects(this->bomb[i]->getGlobalBoundsHitbox())
+			&& this->delayBomb.getElapsedTime().asSeconds() > 0.5f
+			&& this->delayAura.getElapsedTime().asSeconds() >= 5.f)
 		{
 			//Decrease Hp
 			this->playerGUI->setHp(-10);
@@ -377,6 +419,53 @@ void Game::updateCoin()
 	}
 }
 
+void Game::updateMagnet()
+{
+	//Count Magnet
+	if (this->playerGUI->score % 100 == 0)
+	{
+		if (countMagnet < 1)
+		{
+			magnetX = 60 + rand() % 1500;
+			magnetY = 100 + rand() % 500;
+			this->magnet.push_back(new Magnet(magnetX, magnetY));
+			countMagnet++;
+		}
+	}
+
+	//Update
+	for (int i = 0; i < this->magnet.size(); ++i)
+	{
+		this->magnet[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < magnet.size(); i++)
+	{
+		if (this->player->getGlobalBoundsHitbox().intersects(this->magnet[i]->getGlobalBoundsHitbox())
+			&& this->delayMagnet.getElapsedTime().asSeconds() > 0.5f)
+		{
+			//Pull(magnet) a coin
+			this->coin[i]->setPosition(this->player->getPosition().x, this->player->getPosition().y);
+
+			//Delete Magnet
+			this->magnet.erase(this->magnet.begin() + i);
+			countMagnet--;
+			break;
+
+			this->delayMagnet.restart();
+		}
+
+		//Left of screen
+		if (this->magnet[i]->getPosition().x + this->magnet[i]->getGlobalbounds().width < 0)
+		{
+			this->magnet.erase(this->magnet.begin() + i);
+			countMagnet--;
+			break;
+		}
+	}
+}
+
 void Game::updatePlayer()
 {
 	this->player->update();
@@ -420,7 +509,6 @@ void Game::updateSound()
 
 	if (gameOverCheck == true && GameOverSong == true)
 	{
-		printf("gameOver sound\n");
 		GameOverSong = false;
 		sound[0].stop();
 		sound[1].play();
@@ -509,12 +597,14 @@ void Game::update()
 			this->updatePlayer();
 			this->updateCollision();
 			this->updateWorld();
+			this->updateMagnet();
 			this->updateCoin();
 			this->updateSpike();
 			this->updateHpBar();
 			this->updateHeartItem();
 			this->updateShield();
 			this->updateBomb();
+			this->cheat();
 		}
 			this->updateSound();
 }
@@ -632,6 +722,14 @@ void Game::update()
 		this->player->render(this->window);//render players and send to window
 	}
 
+	void Game::renderMagnet()
+	{
+		for (auto* i : this->magnet)
+		{
+			i->render(this->window);
+		}
+	}
+
 	void Game::renderWorld()
 	{
 		this->window.draw(this->worldBackground);
@@ -702,6 +800,9 @@ void Game::update()
 			//Render Item
 			this->renderHeartItem();
 			this->renderShield();
+
+			//Render Magnet
+			this->renderMagnet();
 
 			//Render game
 			this->rederPlayer();

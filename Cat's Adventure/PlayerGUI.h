@@ -28,10 +28,12 @@ public:
 
 	int  hp = 100;
 	int score = 0;
+	int level = 1;
 
 	//Function
 	void setScore(int n);
 	void setHp(int n);
+	void setLevel(int n);
 	void updateScore();
 	void updateHpBar();
 	void update();
