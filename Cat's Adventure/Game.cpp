@@ -2,6 +2,7 @@
 #include "Game.h"
 
 
+
 void Game::initMenuPress()
 {
 	this->font2.loadFromFile("Fonts/rainyhearts.ttf");
@@ -27,7 +28,7 @@ void Game::initSound()
 	sound[2].setBuffer(buffer[2]);
 
 	//Menu Sound
-	buffer[3].loadFromFile("Sound/01 - Title Screen.wav");
+	buffer[3].loadFromFile("Sound/002 Title Screen.wav");
 	sound[3].setBuffer(buffer[3]);
 }
 
@@ -49,6 +50,11 @@ void Game::initWorld()
 		std::cout << "ERORR Can't load background" << "\n";
 	}
 	this->worldBackground.setTexture(this->worldBackgroundTex);
+}
+
+void Game::initBird()
+{
+	this->bird = new Bird();
 }
 
 void Game::initHpBar()
@@ -78,7 +84,6 @@ void Game::initUsername()
 		std::cout << "ERORR Can't load background" << "\n";
 	}
 	this->nameBackground.setTexture(this->nameBackgroundTex);
-	//this->nameBackground.setScale(3.f, 3.f);
 }
 
 Game::Game()
@@ -86,6 +91,8 @@ Game::Game()
 	timeUS = timeText.getElapsedTime().asMilliseconds();
 	end = 0;
 
+	//this->initBird();
+	this->initBird();
 	this->initMenuPress();
 	this->initWindow();
 	this->initSound();
@@ -121,6 +128,12 @@ Game::~Game()
 		delete i;
 	}
 
+	//Bird
+	for (auto* i : this->birds)
+	{
+		delete i;
+	}
+
 	//Boost Hp
 	for (auto* i : this->heartItem)
 	{
@@ -133,8 +146,8 @@ Game::~Game()
 		delete i;
 	}
 
-	//Magnet
-	for (auto* i : this->magnet)
+	//Gift
+	for (auto* i : this->gift)
 	{
 		delete i;
 	}
@@ -206,7 +219,6 @@ void Game::updateShield()
 
 		if (delayAura.getElapsedTime().asSeconds() >= 5.f)
 			IsAura = false;
-
 	}
 }
 
@@ -273,7 +285,7 @@ void Game::updateSpike()
 	}
 
 	//LEVEL 5
-	if (this->playerGUI->score == 800)
+	if (this->playerGUI->score == 1000)
 	{
 		this->playerGUI->level = 5;
 		if (countSpike < 10)
@@ -395,7 +407,7 @@ void Game::updateBomb()
 void Game::updateCoin()
 {
 	//Random Coin
-	if (this->randomCoin.getElapsedTime().asSeconds() >= 0.5f)
+	if (this->randomCoin.getElapsedTime().asSeconds() >= 0.5f || bonus == true)
 	{
 		if (countCoin < 12)
 		{
@@ -434,48 +446,97 @@ void Game::updateCoin()
 	}
 }
 
-void Game::updateMagnet()
+void Game::updateGift()
 {
-	//Count Magnet
-	if (this->playerGUI->score % 100 == 0)
+	//Count Gift
+	if (this->playerGUI->score % 500 == 0 && this->playerGUI->score != 0)
 	{
-		if (countMagnet < 1)
+		if (countGift < 1)
 		{
-			magnetX = 60 + rand() % 1500;
-			magnetY = 100 + rand() % 500;
-			this->magnet.push_back(new Magnet(magnetX, magnetY));
-			countMagnet++;
+			giftX = 60 + rand() % 1500;
+			giftY = 100 + rand() % 500;
+			this->gift.push_back(new Bonus(giftX, giftY));
+			countGift++;
 		}
 	}
 
 	//Update
-	for (int i = 0; i < this->magnet.size(); ++i)
+	for (int i = 0; i < this->gift.size(); ++i)
 	{
-		this->magnet[i]->update();
+		this->gift[i]->update();
 	}
 
 	//Collision
-	for (size_t i = 0; i < magnet.size(); i++)
+	for (size_t i = 0; i < gift.size(); i++)
 	{
-		if (this->player->getGlobalBoundsHitbox().intersects(this->magnet[i]->getGlobalBoundsHitbox())
-			&& this->delayMagnet.getElapsedTime().asSeconds() > 0.5f)
+		if (this->player->getGlobalBoundsHitbox().intersects(this->gift[i]->getGlobalBoundsHitbox())
+			&& this->delayGift.getElapsedTime().asSeconds() > 0.5f)
 		{
-			//Pull(magnet) a coin
-			this->coin[i]->setPosition(this->player->getPosition().x, this->player->getPosition().y);
+			//Bonus
+			countCoin = -30;
+			bonus = true;
 
 			//Delete Magnet
-			this->magnet.erase(this->magnet.begin() + i);
-			countMagnet--;
+			this->gift.erase(this->gift.begin() + i);
+			countGift--;
 			break;
 
-			this->delayMagnet.restart();
+			this->delayGift.restart();
+			this->bonusTime.restart();
+		}
+
+		if (bonusTime.getElapsedTime().asSeconds() >= 5.f)
+		{
+			bonus = false;
 		}
 
 		//Left of screen
-		if (this->magnet[i]->getPosition().x + this->magnet[i]->getGlobalbounds().width < 0)
+		if (this->gift[i]->getPosition().x + this->gift[i]->getGlobalbounds().width < 0)
 		{
-			this->magnet.erase(this->magnet.begin() + i);
-			countMagnet--;
+			this->gift.erase(this->gift.begin() + i);
+			countGift--;
+			break;
+		}
+	}
+}
+
+void Game::updateBird()
+{
+	//LEVEL 5
+	//Count Bird
+	if (this->playerGUI->score == 1000)
+	{
+		if (countBird < 1)
+		{
+			birdX--;
+			birdY = 100 + rand() % 150;
+			this->birds.push_back(new Bird(1600, birdY));
+			countBird++;
+		}
+	}
+
+	//Update
+	for (int i = 0; i < this->birds.size(); ++i)
+	{
+		this->birds[i]->update();
+	}
+
+	//Collision
+	for (size_t i = 0; i < birds.size(); i++)
+	{
+		if (this->player->getGlobalBoundsHitbox().intersects(this->birds[i]->getGlobalBoundsHitbox())
+			&& this->delayBird.getElapsedTime().asSeconds() >= 0.6f && this->playerGUI->hp >= 10
+			&& this->delayAura.getElapsedTime().asSeconds() >= 5.f)
+		{
+			this->playerGUI->setHp(-15);
+			this->delayBird.restart();
+		}
+
+		//Left of screen
+		if (this->birds[i]->getPosition().x + this->birds[i]->getGlobalBoundsHitbox().width < 0)
+		{
+			this->birds.erase(this->birds.begin() + i);
+			countBird--;
 			break;
 		}
 	}
@@ -515,7 +576,7 @@ void Game::updateHighScore()
 
 void Game::updateSound()
 {
-	if (gameOverCheck == false && ThemeSongOn == false && menuCheck == false)
+	if (gameOverCheck == false && ThemeSongOn == false && menuCheck == false /* && TitleSong == false*/)
 	{
 		ThemeSongOn = true;
 		sound[0].play();
@@ -537,10 +598,10 @@ void Game::updateSound()
 		sound[2].setVolume(1.5);
 	}
 
-	if (menuCheck == true || namestate == true || scoreCheck == true)
+	if (menuCheck == true && TitleSong == false)
 	{
 		printf("menu\n");
-		sound[0].stop();
+		TitleSong = true;
 		sound[3].play();
 		sound[3].setVolume(1.5);
 	}
@@ -584,6 +645,7 @@ void Game::update()
 		//Set Menu
 		if (menuCheck == true)
 		{
+			TitleSong == true;
 			switch (ev.type)
 			{
 			case sf::Event::KeyReleased:
@@ -628,23 +690,25 @@ void Game::update()
 		}
 	}
 
-		if (IsOpen == true && playerGUI->hp > 0)
-		{
-			this->updateLevel();
-			this->updatePlayer();
-			this->updateCollision();
-			this->updateWorld();
-			this->updateMagnet();
-			this->updateCoin();
-			this->updateSpike();
-			this->updateHpBar();
-			this->updateHeartItem();
-			this->updateShield();
-			this->updateBomb();
-			this->cheat();
-		}
-			this->updateSound();
+	if (IsOpen == true && playerGUI->hp > 0)
+	{
+		this->updateGift();
+		this->updateBird();
+		this->updateLevel();
+		this->updatePlayer();
+		this->updateCollision();
+		this->updateWorld();
+		this->updateCoin();
+		this->updateSpike();
+		this->updateHpBar();
+		this->updateHeartItem();
+		this->updateShield();
+		this->updateBomb();
+		this->cheat();
+	}
+		//this->updateSound();
 }
+
 
 	void Game::renderSpike()
 	{
@@ -754,14 +818,15 @@ void Game::update()
 		this->window.draw(this->nameBackground);
 	}
 
+
 	void Game::rederPlayer()
 	{
 		this->player->render(this->window);//render players and send to window
 	}
 
-	void Game::renderMagnet()
+	void Game::renderGift()
 	{
-		for (auto* i : this->magnet)
+		for (auto* i : this->gift)
 		{
 			i->render(this->window);
 		}
@@ -825,11 +890,10 @@ void Game::update()
 			//Render Coin
 			this->renderCoin();
 
-			//Render Spike
+			//Render Enenies
 			this->renderSpike();
-
-			//Render Bomb
 			this->renderBomb();
+			this->renderBird();
 
 			//Render HpBar
 			this->renderGUI();
@@ -837,9 +901,7 @@ void Game::update()
 			//Render Item
 			this->renderHeartItem();
 			this->renderShield();
-
-			//Render Magnet
-			this->renderMagnet();
+			this->renderGift();
 
 			//Render game
 			this->rederPlayer();
@@ -893,13 +955,20 @@ void Game::update()
 		this->window.display();
 	}
 
+	void Game::renderBird()
+	{
+		for (auto* i : this->birds)
+		{
+			i->render(this->window);
+		}
+	}
+
 
 const sf::RenderWindow& Game::getWindow() const
 {
 	// TODO: insert return statement here
 	return this->window;
 }
-
 
 void Game::renderMenu()
 {
@@ -911,6 +980,3 @@ void Game::renderGameOver()
 {
 	this->gameOver->render(window);
 }
-
-
-

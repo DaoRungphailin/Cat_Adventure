@@ -11,6 +11,8 @@
 #include "GameOver.h"
 #include "Score.h"
 #include "Magnet.h"
+#include "Bird.h"
+#include "Bonus.h"
 
 class Game
 {
@@ -21,6 +23,7 @@ private:
 	Player* player;
 
 	//Private function
+	void initBird();
 	void initMenuPress();
 	void initSound();
 	void initWindow();
@@ -52,13 +55,15 @@ private:
 	float shieldY = 0;
 	int countShield = 0;
 
-	/*Magnet*/
-	std::vector<Magnet*> magnet;
-	sf::Clock randomMagnet;
-	sf::Clock delayMagnet;
-	float magnetX = 0;
-	float magnetY = 0;
-	int countMagnet = 0;
+	/*Gift*/
+	std::vector<Bonus*> gift;
+	sf::Clock randomGift;
+	sf::Clock delayGift;
+	sf::Clock bonusTime;
+	float giftX = 0;
+	float giftY = 0;
+	int countGift = 0;
+	bool bonus = false;
 
 	//Coin
 	std::vector<Coin*> coin;
@@ -82,6 +87,14 @@ private:
 	float bombY = 0;
 	int countBomb = 0;
 	int addBomb = 0;
+
+	//Bird
+	Bird* bird;
+	std::vector<Bird*> birds;
+	sf::Clock delayBird;
+	int countBird = 0;
+	float birdX;
+	float birdY;
 
 	//GUI
 	PlayerGUI* playerGUI;
@@ -133,6 +146,7 @@ private:
 	bool ThemeSongOn = false;
 	bool GameOverSong = false;
 	bool LevelUp = false;
+	bool TitleSong = false;
 
 public:
 
@@ -144,10 +158,11 @@ public:
 	void cheat();
 
 	//Functions
+	void updateGift();
+	void updateBird();
 	void updateLevel();
 	void updateSound();
 	void updateHighScore();
-	void updateMagnet();
 	void updateShield();
 	void updateHeartItem();
 	void updateHpBar();
@@ -159,11 +174,12 @@ public:
 	void updateWorld();
 	void update();
 
+	void renderGift();
+	void renderBird();
 	void renderMenuPress();
 	void renderUsername();
 	void getName(std::string name);
 	void renderHighScore();
-	void renderMagnet();
 	void renderShield();
 	void renderHeartItem();
 	void renderGUI();
