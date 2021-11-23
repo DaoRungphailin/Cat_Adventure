@@ -23,6 +23,7 @@ private:
 	Player* player;
 
 	//Private function
+	void initAura();
 	void initBird();
 	void initMenuPress();
 	void initSound();
@@ -45,6 +46,7 @@ private:
 	int countHeart = 0;
 
 	/*Shield*/
+	Shield* aura;
 	std::vector<Shield*> shield;
 	sf::Clock randomShield;
 	sf::Clock delayShield;
@@ -146,7 +148,6 @@ private:
 	bool ThemeSongOn = false;
 	bool GameOverSong = false;
 	bool LevelUp = false;
-	bool TitleSong = false;
 
 public:
 

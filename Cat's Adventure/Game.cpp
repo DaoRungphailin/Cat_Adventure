@@ -16,7 +16,7 @@ void Game::initMenuPress()
 void Game::initSound()
 {
 	//Game run
-	buffer[0].loadFromFile("Sound/03 - Super Mario Bros 2 Main Theme.wav");
+	buffer[0].loadFromFile("Sound/Bongo Cat - Christmas Songs.wav");
 	sound[0].setBuffer(buffer[0]);
 
 	//Game Over
@@ -26,10 +26,6 @@ void Game::initSound()
 	//Level up
 	buffer[2].loadFromFile("Sound/06 - Power Up.wav");
 	sound[2].setBuffer(buffer[2]);
-
-	//Menu Sound
-	buffer[3].loadFromFile("Sound/002 Title Screen.wav");
-	sound[3].setBuffer(buffer[3]);
 }
 
 void Game::initWindow()
@@ -50,6 +46,11 @@ void Game::initWorld()
 		std::cout << "ERORR Can't load background" << "\n";
 	}
 	this->worldBackground.setTexture(this->worldBackgroundTex);
+}
+
+void Game::initAura()
+{
+	this->aura = new Shield();
 }
 
 void Game::initBird()
@@ -91,7 +92,7 @@ Game::Game()
 	timeUS = timeText.getElapsedTime().asMilliseconds();
 	end = 0;
 
-	//this->initBird();
+	this->initAura();
 	this->initBird();
 	this->initMenuPress();
 	this->initWindow();
@@ -211,15 +212,15 @@ void Game::updateShield()
 			break;
 		}
 
+	}
 		//Draw Aura 
 		if (IsAura == true)
 		{
-			this->shield[i]->setPositionAura(this->player->getPosition().x - 40.f, this->player->getPosition().y + 25.f);
+			this->aura->setPositionAura(this->player->getPosition().x - 40.f, this->player->getPosition().y + 25.f);
 		}
 
-		if (delayAura.getElapsedTime().asSeconds() >= 5.f)
+		if (delayAura.getElapsedTime().asSeconds() >= 3.f)
 			IsAura = false;
-	}
 }
 
 void Game::updateHeartItem()
@@ -449,7 +450,7 @@ void Game::updateCoin()
 void Game::updateGift()
 {
 	//Count Gift
-	if (this->playerGUI->score % 500 == 0 && this->playerGUI->score != 0)
+	if (this->playerGUI->score % 800 == 0 && this->playerGUI->score != 0)
 	{
 		if (countGift < 1)
 		{
@@ -473,7 +474,7 @@ void Game::updateGift()
 			&& this->delayGift.getElapsedTime().asSeconds() > 0.5f)
 		{
 			//Bonus
-			countCoin = -30;
+			countCoin = -10;
 			bonus = true;
 
 			//Delete Magnet
@@ -485,7 +486,7 @@ void Game::updateGift()
 			this->bonusTime.restart();
 		}
 
-		if (bonusTime.getElapsedTime().asSeconds() >= 5.f)
+		if (bonusTime.getElapsedTime().asSeconds() >= 3.f)
 		{
 			bonus = false;
 		}
@@ -504,7 +505,7 @@ void Game::updateBird()
 {
 	//LEVEL 5
 	//Count Bird
-	if (this->playerGUI->score == 1000)
+	if (this->playerGUI->score >= 1000)
 	{
 		if (countBird < 1)
 		{
@@ -576,8 +577,9 @@ void Game::updateHighScore()
 
 void Game::updateSound()
 {
-	if (gameOverCheck == false && ThemeSongOn == false && menuCheck == false /* && TitleSong == false*/)
+	if (gameOverCheck == false && ThemeSongOn == false && menuCheck == true)
 	{
+		printf("song\n");
 		ThemeSongOn = true;
 		sound[0].play();
 		sound[0].setVolume(1.5);
@@ -588,28 +590,21 @@ void Game::updateSound()
 		GameOverSong = false;
 		sound[0].stop();
 		sound[1].play();
-		sound[1].setVolume(1.5);
+		sound[1].setVolume(2);
 	}
 
 	if (LevelUp == true)
 	{
 		LevelUp = false;
 		sound[2].play();
-		sound[2].setVolume(1.5);
-	}
-
-	if (menuCheck == true && TitleSong == false)
-	{
-		printf("menu\n");
-		TitleSong = true;
-		sound[3].play();
-		sound[3].setVolume(1.5);
+		sound[2].setVolume(2);
 	}
 }
 
 void Game::updateLevel()
 {
-	if (this->playerGUI->score % 200 == 0 && this->playerGUI->score != 0)
+	if ((this->playerGUI->score % 200 == 0 && this->playerGUI->score != 0 && this->playerGUI->score <= 1000)
+		|| this->playerGUI->score == 1500)
 		LevelUp = true;
 }
 
@@ -645,7 +640,6 @@ void Game::update()
 		//Set Menu
 		if (menuCheck == true)
 		{
-			TitleSong == true;
 			switch (ev.type)
 			{
 			case sf::Event::KeyReleased:
@@ -706,7 +700,7 @@ void Game::update()
 		this->updateBomb();
 		this->cheat();
 	}
-		//this->updateSound();
+		this->updateSound();
 }
 
 
@@ -725,8 +719,11 @@ void Game::update()
 		{
 			i->render(this->window);
 
-			if (IsAura == true)
-				i->renderAura(this->window);
+		}
+		//Render Aura
+		if (IsAura == true)
+		{
+			aura->renderAura(this->window);
 		}
 	}
 

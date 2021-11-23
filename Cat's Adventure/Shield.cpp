@@ -84,6 +84,13 @@ void Shield::setPositionAura(float x, float y)
 	this->aura.setPosition(x, y);
 }
 
+Shield::Shield()
+{
+	this->initHitbox();
+	this->initTexture();
+	this->initSprite();
+}
+
 const sf::FloatRect Shield::getGlobalBoundsHitbox() const
 {
 	return this->shieldHitbox.getGlobalBounds();
