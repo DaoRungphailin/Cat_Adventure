@@ -226,7 +226,7 @@ void Game::updateShield()
 void Game::updateHeartItem()
 {
 	//Count Heart
-	if (this->playerGUI->score % 100 == 0)
+	if (this->playerGUI->score % 150 == 0)
 	{
 		if (countHeart < 1)
 		{
@@ -286,7 +286,7 @@ void Game::updateSpike()
 	}
 
 	//LEVEL 5
-	if (this->playerGUI->score == 1000)
+	if (this->playerGUI->score == 1200)
 	{
 		this->playerGUI->level = 5;
 		if (countSpike < 10)
@@ -503,14 +503,26 @@ void Game::updateGift()
 
 void Game::updateBird()
 {
-	//LEVEL 5
+	//LEVEL 4
 	//Count Bird
-	if (this->playerGUI->score >= 1000)
+	if (this->playerGUI->score >= 800)
 	{
 		if (countBird < 1)
 		{
-			birdX--;
+			birdX -= 10;
 			birdY = 100 + rand() % 150;
+			this->birds.push_back(new Bird(1600, birdY));
+			countBird++;
+		}
+	}
+
+	//LEVEL 5
+	if (this->playerGUI->score >= 1200)
+	{
+		if (countBird < 2)
+		{
+			birdX -= 10;
+			birdY = 100 + rand() % 300;
 			this->birds.push_back(new Bird(1600, birdY));
 			countBird++;
 		}
@@ -579,7 +591,6 @@ void Game::updateSound()
 {
 	if (gameOverCheck == false && ThemeSongOn == false && menuCheck == true)
 	{
-		printf("song\n");
 		ThemeSongOn = true;
 		sound[0].play();
 		sound[0].setVolume(1.5);
@@ -603,8 +614,8 @@ void Game::updateSound()
 
 void Game::updateLevel()
 {
-	if ((this->playerGUI->score % 200 == 0 && this->playerGUI->score != 0 && this->playerGUI->score <= 1000)
-		|| this->playerGUI->score == 1500)
+	if ((this->playerGUI->score % 200 == 0 && this->playerGUI->score != 0 && this->playerGUI->score < 1000)
+		|| this->playerGUI->score == 1200)
 		LevelUp = true;
 }
 
@@ -800,6 +811,7 @@ void Game::update()
 		window.draw(p_name);
 		window.draw(enter);
 		this->renderMenuPress();
+
 		//Enter to continue
 		this->menuPressText.setString("Press \"Enter\" to continue");
 		this->menuPressText.setPosition(1700.f / 2.f - this->menuPressText.getGlobalBounds().width / 2.f, 760.f / 2.f - this->menuPressText.getGlobalBounds().height / 2.f + 310.f);
